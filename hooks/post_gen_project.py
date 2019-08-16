@@ -71,12 +71,6 @@ if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y':
 if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y':
     remove_cobra_files()
 
-# 6. Remove files depending on selection of mod or dep
-if '{{ cookiecutter.go_mod_or_dep}}'.lower() == 'mod':
-    remove_file("Gopkg.toml")
-else:
-    remove_file("go.mod")
-
 # 7. Initialize Git (should be run after all file have been modified or deleted)
 if '{{ cookiecutter.use_git }}'.lower() == 'y':
     init_git()
