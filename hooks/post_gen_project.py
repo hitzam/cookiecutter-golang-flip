@@ -35,16 +35,6 @@ def init_git():
         git = Popen(command, cwd=PROJECT_DIRECTORY)
         git.wait()
 
-
-def remove_docker_files():
-    """
-    Removes files needed for docker if it isn't going to be used
-    """
-    for filename in ["Dockerfile",]:
-        os.remove(os.path.join(
-            PROJECT_DIRECTORY, filename
-        ))
-
 def remove_viper_files():
     """
     Removes files needed for viper config utils
@@ -69,18 +59,6 @@ def remove_cobra_files():
         PROJECT_DIRECTORY, "cmd"
     ))
 
-'''def remove_circleci_files():
-    """
-    Removes files needed for viper config utils
-    """
-    shutil.rmtree(os.path.join(
-        PROJECT_DIRECTORY, ".circleci"
-    ))
-'''
-# 1. Remove Dockerfiles if docker is not going to be used
-if '{{ cookiecutter.use_docker }}'.lower() != 'y':
-    remove_docker_files()
-
 # 2. Remove viper config if not seleted
 if '{{ cookiecutter.use_viper_config }}'.lower() != 'y':
     remove_viper_files()
@@ -92,7 +70,7 @@ if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y':
 # 4. Remove cobra utils if not seleted
 if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y':
     remove_cobra_files()
-    
+
 # 6. Remove files depending on selection of mod or dep
 if '{{ cookiecutter.go_mod_or_dep}}'.lower() == 'mod':
     remove_file("Gopkg.toml")

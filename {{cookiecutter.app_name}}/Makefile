@@ -17,24 +17,24 @@ help:
 	@echo 'Management commands for {{cookiecutter.app_name}}:'
 	@echo
 	@echo 'Usage:'
-	@echo '    make install         Install the project's dependencies.'
-	@echo '    make build           Compile the project.'
-	{% if cookiecutter.use_docker == "y" %}@echo '    make build-alpine    Compile optimized for alpine linux.'
-	@echo '    make package         Build final docker image with just the go binary inside.'
-	@echo '    make tag             Tag image created by package with latest, git commit and version.'
-	@echo '    make push            Push tagged images to registry.'{% endif %}
-	@echo '    make test            Run tests on a compiled project.'
-	@echo '    make clean           Clean the directory tree.'
+	@echo '    make install             Install the project's dependencies.'
+	@echo '    make build               Compile the project.'
+	@echo '    make build-alpine        Compile optimized for alpine linux.'
+	@echo '    make package             Build final docker image with just the go binary inside.'
+	@echo '    make tag                 Tag image created by package with latest, git commit and version.'
+	@echo '    make push                Push tagged images to registry.
+	@echo '    make test                Run tests on a compiled project.'
+	@echo '    make clean               Clean the directory tree.'
 	@echo
 
 install:
-	dep ensure -v
+	go get -v ./...
 
 build: install
 	@echo "building ${BIN_NAME} $(VERSION)"
 	@echo "GOPATH=${GOPATH}"
 	go build -ldflags "-X github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/version.GitCommit=$(GIT_COMMIT)$(GIT_DIRTY) -X github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/version.Version=$(VERSION) -X github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/Environment.Version=$(ENVIRONMENT) -X github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/version.BuildDate=$(BUILD_DATE)" -o bin/${BIN_NAME}
-{% if cookiecutter.use_docker == "y" %}
+
 build-alpine: install
 	@echo "building ${BIN_NAME} $(VERSION)"
 	@echo "GOPATH=${GOPATH}"
@@ -55,7 +55,7 @@ push: tag
 	docker push ${IMAGE_NAME}:$(GIT_COMMIT)
 	docker push ${IMAGE_NAME}:$(VERSION)
 	docker push ${IMAGE_NAME}:latest
-{% endif %}
+
 test:
 	go test ./...
 

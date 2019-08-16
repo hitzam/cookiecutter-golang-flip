@@ -8,7 +8,6 @@
     "docker_build_image": "kitabisa/alpine-golang-buildimage",
     "docker_build_image_version": ["1.12.4", "1.11.9", "1.10.8", "1.9.7"],
     "go_mod_or_dep": ["dep", "mod"],
-    "use_docker": "y",
     "use_git": "y",
     "use_logrus_logging": "y",
     "use_viper_config": "y",
