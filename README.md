@@ -52,7 +52,7 @@ $ brew install cookiecutter
 
 Finally, to run it based on this template, type:
 ```console
-$ cookiecutter https://github.com/lacion/cookiecutter-golang.git
+$ cookiecutter https://github.com/kitabisa/cookiecutter-golang.git
 ```
 
 You will be asked about your basic info (name, project name, app name, etc.). This info will be used to customize your new project.
@@ -73,11 +73,6 @@ use_git [y]: y
 use_logrus_logging [y]: y
 use_viper_config [y]: y
 use_cobra_cmd [y]: y
-Select use_ci:
-1 - travis
-2 - circle
-3 - none
-Choose from 1, 2, 3 [1]: 1
 ```
 
 Enter the project and take a look around:
