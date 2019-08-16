@@ -63,12 +63,11 @@ Answer the prompts with your own desired [options](). For example:
 ```console
 full_name [Luis Morales]: Luis Morales
 github_username [lacion]: lacion
-app_name [mygolangproject]: echoserver
+app_name [mygolangproject]: echollsserver
 project_short_description [A Golang project.]: Awesome Echo Server
 docker_hub_username [lacion]: lacion
 docker_image [lacion/docker-alpine:latest]: lacion/docker-alpine:latest
 docker_build_image [lacion/docker-alpine:gobuildimage]: lacion/docker-alpine:gobuildimage
-use_git [y]: y
 use_logrus_logging [y]: y
 use_viper_config [y]: y
 use_cobra_cmd [y]: y

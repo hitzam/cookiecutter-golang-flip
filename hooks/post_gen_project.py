@@ -70,9 +70,3 @@ if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y':
 # 4. Remove cobra utils if not seleted
 if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y':
     remove_cobra_files()
-
-# 7. Initialize Git (should be run after all file have been modified or deleted)
-if '{{ cookiecutter.use_git }}'.lower() == 'y':
-    init_git()
-else:
-    remove_file(".gitignore")

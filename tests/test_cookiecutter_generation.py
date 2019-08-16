@@ -21,7 +21,6 @@ def context():
         "docker_hub_username": "lacion",
         "docker_image": "lacion/docker-alpine:latest",
         "docker_build_image": "lacion/docker-alpine:gobuildimage",
-        "use_git": "y",
         "use_logrus_logging": "y",
         "use_viper_config": "y"
 }
@@ -58,7 +57,7 @@ def test_default_configuration(cookies, context):
     assert paths
     check_paths(paths)
 
-@pytest.fixture(params=['use_git', 'use_logrus_logging', 'use_viper_config'])
+@pytest.fixture(params=['use_logrus_logging', 'use_viper_config'])
 def feature_context(request, context):
     context.update({request.param: 'n'})
     return context
