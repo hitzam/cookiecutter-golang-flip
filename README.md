@@ -77,7 +77,7 @@ use_cobra_cmd": [y]
 
 Enter the project and take a look around:
 ```console
-$ cd echoserver/
+$ cd kitabisa/
 $ ls
 ```
 
@@ -85,7 +85,7 @@ Run `make help` to see the available management commands, or just run `make buil
 ```console
 $ make help
 $ make build
-$ ./bin/echoserver
+$ ./bin/kitabisa
 ```
 
 ## Projects build with cookiecutter-golang
