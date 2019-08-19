@@ -3,7 +3,7 @@
     "github_username": "kitabisa",
     "app_name": "golangproject",
     "project_short_description": "A Golang project.",
-    "squad": ["frontend", "backend", "payment", "infra"],
+    "select_squad": ["frontend", "backend", "payment", "infra"],
     "docker_hub_username": "kitabisa",
     "docker_image": "kitabisa/alpine-base-image:latest",
     "docker_build_image": "kitabisa/alpine-golang-buildimage",
