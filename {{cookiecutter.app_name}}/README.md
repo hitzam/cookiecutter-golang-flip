@@ -15,4 +15,6 @@ $ ./bin/{{cookiecutter.app_name}}
 
 ### Testing
 
-``make test``
+```console
+$ make test
+```
