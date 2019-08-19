@@ -1,4 +1,4 @@
-.PHONY: default help install build build-alpine package tag push helm test clean
+.PHONY: default help install build build-alpine package tag push helm helm-diff test clean
 
 APP_NAME     = {{cookiecutter.app_name}}
 VERSION     := $(shell git describe --tags)
@@ -8,7 +8,7 @@ GIT_DIRTY    = $(shell test -n "`git status --porcelain`" && echo "+CHANGES" || 
 ENVIRONMENT ?= $(shell ([[ $(GIT_BRANCH) == 'master' ]] && echo "prod") || ([[ $(GIT_BRANCH) == 'staging' ]] && echo "stg") || echo "dev")
 BUILD_DATE   = $(shell date '+%Y-%m-%d-%H:%M:%S')
 IMAGE_NAME  ?= "{{cookiecutter.docker_hub_username}}/{{cookiecutter.app_name}}"
-SQUAD        = "{{cookiecutter.select_squad}}"
+SQUAD        = "{{cookiecutter.squad}}"
 
 default: help
 
@@ -23,6 +23,7 @@ help:
 	@echo '    make tag                 Tag image created by package with latest, git commit and version.'
 	@echo '    make push                Push tagged images to registry.'
 	@echo '    make helm                Deploy to Kubernetes via Helm.'
+	@echo '    make helm-diff           Shows a diff explaing what a Helm upgrade would change.'
 	@echo '    make test                Run tests on a compiled project.'
 	@echo '    make clean               Clean the directory tree.'
 
@@ -59,6 +60,12 @@ push: tag
 
 helm:
 	helm upgrade ${APP_NAME} kitabisa/app --install \
+		--namespace ${SQUAD} \
+		--values _infra/k8s/$(ENVIRONMENT).yaml \
+		--set meta.env=$(ENVIRONMENT),meta.squad=${SQUAD},meta.version=$(VERSION),image.repository=${IMAGE_NAME},image.tag=${VERSION}
+
+helm-diff:
+	helm diff upgrade ${APP_NAME} kitabisa/app \
 		--namespace ${SQUAD} \
 		--values _infra/k8s/$(ENVIRONMENT).yaml \
 		--set meta.env=$(ENVIRONMENT),meta.squad=${SQUAD},meta.version=$(VERSION),image.repository=${IMAGE_NAME},image.tag=${VERSION}

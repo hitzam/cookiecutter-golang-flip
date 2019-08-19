@@ -6,10 +6,11 @@
 
 This project requires Go to be installed. On OS X with Homebrew you can just run `brew install go`.
 
-Running it then should be as simple as:
+Run `make help` to see the available management commands, or just run `make build` to build your project.
 
 ```console
-$ make
+$ make help
+$ make build
 $ ./bin/{{cookiecutter.app_name}}
 ```
 
