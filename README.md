@@ -63,7 +63,7 @@ Answer the prompts with your own desired options. For example:
 ```console
 full_name [Kitabisa]: Kitabisa
 github_username [kitabisa]: kitabisa
-app_name [golangproject]: golang-service
+app_name [golangproject]: golang-services
 project_short_description [A Golang Project]: Awesome Golang service
 select_squad:
 1 - frontend
