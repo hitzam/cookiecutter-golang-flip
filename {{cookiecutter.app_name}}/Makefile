@@ -16,10 +16,10 @@ help:
 	@echo 'Management commands for {{cookiecutter.app_name}}:'
 	@echo
 	@echo 'Usage:'
-	@echo '    make install             Install the projects dependencies.'
+	@echo '    make install             Install the project`s dependencies.'
 	@echo '    make build               Compile the project.'
-	@echo '    make build-alpine        Compile optimized for alpine linux.'
-	@echo '    make package             Build final docker image with just the go binary inside.'
+	@echo '    make build-alpine        Compile optimized for Alpine Linux.'
+	@echo '    make package             Build final Docker image with just the Go binary inside.'
 	@echo '    make tag                 Tag image created by package with latest, git commit and version.'
 	@echo '    make push                Push tagged images to registry.'
 	@echo '    make helm                Deploy to Kubernetes via Helm.'
