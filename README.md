@@ -34,7 +34,7 @@ Apps run under non root user and also with [dumb-init](https://github.com/Yelp/d
 
 ## Usage
 
-Let's pretend you want to create a project called "golang-service". Rather than starting from scratch maybe copying
+Let's pretend you want to create a project called "golang-services". Rather than starting from scratch maybe copying
 some files and then editing the results to include your name, email, and various configuration issues that always
 get forgotten until the worst possible moment, get cookiecutter to do all the work.
 
