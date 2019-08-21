@@ -59,14 +59,17 @@ def remove_cobra_files():
         PROJECT_DIRECTORY, "cmd"
     ))
 
-# 2. Remove viper config if not seleted
+# 1. Remove viper config if not seleted
 if '{{ cookiecutter.use_viper_config }}'.lower() != 'y':
     remove_viper_files()
 
-# 3. Remove logrus utils if not seleted
+# 2. Remove logrus utils if not seleted
 if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y':
     remove_logrus_files()
 
-# 4. Remove cobra utils if not seleted
+# 3. Remove cobra utils if not seleted
 if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y':
     remove_cobra_files()
+
+# 4. Initialize Git (should be run after all file have been modified or deleted)
+init_git()

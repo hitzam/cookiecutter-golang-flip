@@ -1,7 +1,7 @@
 .PHONY: default help install build build-alpine package tag push helm helm-diff test clean
 
 APP_NAME     = {{cookiecutter.app_name}}
-VERSION     := $(shell git describe --tags)
+VERSION     := $(shell git describe --always --tags)
 GIT_COMMIT   = $(shell git rev-parse HEAD)
 GIT_BRANCH   = $(shell git rev-parse --abbrev-ref HEAD)
 GIT_DIRTY    = $(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
@@ -27,7 +27,7 @@ help:
 	@echo '    make test                Run tests on a compiled project.'
 	@echo '    make clean               Clean the directory tree.'
 
-	@echo
+	@echo  c
 
 install:
 	go get -v ./...
@@ -62,13 +62,13 @@ helm:
 	helm upgrade ${APP_NAME} kitabisa/app --install \
 		--namespace ${SQUAD} \
 		--values _infra/k8s/$(ENVIRONMENT).yaml \
-		--set meta.env=$(ENVIRONMENT),meta.squad=${SQUAD},meta.version=$(VERSION),image.repository=${IMAGE_NAME},image.tag=${VERSION}
+		--set meta.env=$(ENVIRONMENT),meta.squad=${SQUAD},meta.version=$(VERSION),image.repository=${IMAGE_NAME},image.tag=$(VERSION)
 
 helm-diff:
 	helm diff upgrade ${APP_NAME} kitabisa/app \
 		--namespace ${SQUAD} \
 		--values _infra/k8s/$(ENVIRONMENT).yaml \
-		--set meta.env=$(ENVIRONMENT),meta.squad=${SQUAD},meta.version=$(VERSION),image.repository=${IMAGE_NAME},image.tag=${VERSION}
+		--set meta.env=$(ENVIRONMENT),meta.squad=${SQUAD},meta.version=$(VERSION),image.repository=${IMAGE_NAME},image.tag=$(VERSION)
 
 test:
 	go test ./...
