@@ -4,22 +4,22 @@ Powered by [Cookiecutter](https://github.com/audreyr/cookiecutter), Cookiecutter
 
 ## Features
 
-- Generous `Makefile` with management commands
-- Uses `go mod` (with optional go module support *requires go 1.11*)
+- Generous `Makefile` with management commands.
+- Uses `go module`.
 - injects build time and git hash at build time.
 
 ## Optional Integrations
 
-- Can use [viper](https://github.com/spf13/viper) for env var config
-- Can use [cobra](https://github.com/spf13/cobra) for cli tools
-- Can use [logrus](https://github.com/sirupsen/logrus) for logging
-- Can create dockerfile for building go binary and dockerfile for final go binary (no code in final container)
-- If docker is used adds docker management commands to makefile
-- Option of TravisCI, CircleCI or None
+- Can use [viper](https://github.com/spf13/viper) for env var config.
+- Can use [cobra](https://github.com/spf13/cobra) for cli tools.
+- Can use [logrus](https://github.com/sirupsen/logrus) for logging.
+- Can create dockerfile for building go binary and dockerfile for final go binary (no code in final container).
+- If docker is used adds docker management commands to makefile.
+- Option of TravisCI, CircleCI or None.
 
 ## Constraints
 
-- Uses `mod` for dependency management
+- Uses `mod` for dependency management.
 - Only maintained 3rd party libraries are used.
 
 This project now uses docker multistage builds, you need at least docker version v17.05.0-ce to use the docker file in this template, [you can read more about multistage builds here](https://www.critiqus.com/post/multi-stage-docker-builds/).
