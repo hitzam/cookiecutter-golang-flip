@@ -43,6 +43,8 @@ func init() {
 
 func readViperConfig(appName string) *viper.Viper {
 	v := viper.New()
+	v.AddConfigPath("./params")
+	v.AddConfigPath("/opt/{{cookiecutter.app_name}}/bin/params")
 	v.SetEnvPrefix(appName)
 	v.AutomaticEnv()
 
