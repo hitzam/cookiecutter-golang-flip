@@ -28,6 +28,6 @@ workflows:
           context: {{cookiecutter.app_name}}-prod
           filters:
             tags:
-              only: /^v.*/
+              only: /^v\d+.\d+.\d+/
             branches:
               ignore: /.*/
