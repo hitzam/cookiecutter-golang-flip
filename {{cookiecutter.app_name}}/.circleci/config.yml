@@ -8,7 +8,7 @@ workflows:
   development:
     jobs:
       - container/gke-deploy:
-          kube-namespace: $KUBE_NAMESPACE_NAME
+          kube-namespace: {{cookiecutter.squad}}
           context: {{cookiecutter.app_name}}-dev
           filters:
             branches:
@@ -16,7 +16,7 @@ workflows:
   staging:
     jobs:
       - container/gke-deploy:
-          kube-namespace: $KUBE_NAMESPACE_NAME
+          kube-namespace: {{cookiecutter.squad}}
           context: {{cookiecutter.app_name}}-stg
           filters:
             branches:
@@ -24,7 +24,7 @@ workflows:
   production:
     jobs:
       - container/gke-deploy:
-          kube-namespace: $KUBE_NAMESPACE_NAME
+          kube-namespace: {{cookiecutter.squad}}
           context: {{cookiecutter.app_name}}-prod
           filters:
             tags:
