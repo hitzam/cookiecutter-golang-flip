@@ -1,0 +1,46 @@
+configMap:
+  mountPath: /opt/{{cookiecutter.app_name}}/bin/params
+
+{% if cookiecutter.is_server != "y" %}app:
+  enabled: false
+{% else %}app:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi
+{% endif %}
+
+{%- if cookiecutter.is_worker == "y" %}
+worker:
+  enabled: true
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi
+{% endif %}
+
+{%- if cookiecutter.is_server != "y" %}
+service:
+  enable: false
+{% endif %}
+
+{%- if cookiecutter.connectivity == "private"  %}
+ingress:
+  enabled: false
+{%- elif cookiecutter.is_server == "y" and cookiecutter.connectivity == "public" %}
+ingress:
+  tls:
+    - hosts:
+        - {{cookiecutter.app_name}}.ktbs.xyz
+  hosts:
+    - host: {{cookiecutter.app_name}}.ktbs.xyz
+      path:
+        - "/"
+{% endif %}
