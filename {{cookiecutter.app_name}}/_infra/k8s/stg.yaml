@@ -31,7 +31,7 @@ service:
   enable: false
 {% endif %}
 
-{%- if cookiecutter.connectivity == "private"  %}
+{%- if cookiecutter.connectivity == "private" %}
 ingress:
   enabled: false
 {%- elif cookiecutter.is_server == "y" and cookiecutter.connectivity == "public" %}
