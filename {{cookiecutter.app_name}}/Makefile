@@ -27,7 +27,7 @@ help:
 	@echo '    make test                Run tests on a compiled project.'
 	@echo '    make clean               Clean the directory tree.'
 
-	@echo  c
+	@echo
 
 install:
 	go get -v ./...

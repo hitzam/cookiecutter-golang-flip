@@ -81,6 +81,12 @@ Choose from 1, 2, 3, 4 (1, 2, 3, 4) [1]: 1
 use_logrus_logging [y]: y
 use_viper_config [y]: y
 use_cobra_cmd [y]: y
+is_server [y]: y
+is_worker [n]: n
+Select connectivity:
+1 - public
+2 - private
+Choose from 1, 2 (1, 2) [1]: 1
 ```
 
 Enter the project and take a look around:
