@@ -1,33 +1,30 @@
 version: 2.1
 
 orbs:
-  container: kitabisa/container@0.0.7
+  container: kitabisa/container@1.0.0
 
 workflows:
   version: 2
   development:
     jobs:
       - container/gke-deploy:
-          kube-namespace: {{cookiecutter.squad}}
-          context: {{cookiecutter.app_name}}-dev
+          context: gke-dev
           filters:
             branches:
-              only: /^dev-.*/
+              only: /^dev.*/
   staging:
     jobs:
       - container/gke-deploy:
-          kube-namespace: {{cookiecutter.squad}}
-          context: {{cookiecutter.app_name}}-stg
+          context: gke-stg
           filters:
             branches:
               only: staging
   production:
     jobs:
       - container/gke-deploy:
-          kube-namespace: {{cookiecutter.squad}}
-          context: {{cookiecutter.app_name}}-prod
+          context: gke-prod
           filters:
             tags:
-              only: /^v\d+.\d+.\d+/
+              only: /^v\d+.\d+.\d+.*/
             branches:
               ignore: /.*/
