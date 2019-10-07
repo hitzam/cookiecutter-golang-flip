@@ -1,7 +1,16 @@
-module github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
+module github.com/kitabisa/{{cookiecutter.app_name}}
 
 require (
-	github.com/Sirupsen/logrus v1.0.6
-	github.com/spf13/cobra v0.0.3
-	github.com/spf13/viper v1.2.0
+	{%- if cookiecutter.use_logrus_logging == "y" %}
+    github.com/sirupsen/logrus v1.4.2
+    {%- endif %}
+    {%- if cookiecutter.use_viper_config == "y" %}
+    github.com/spf13/viper v1.4.0
+    {%- endif %}
+	{%- if cookiecutter.use_cobra_cmd == "y" %}
+    github.com/spf13/cobra v0.0.5
+    {%- endif %}
+	{%- if cookiecutter.enable_auto_migration == "y" %}
+    github.com/golang-migrate/migrate v4.6.2
+    {%- endif %}
 )

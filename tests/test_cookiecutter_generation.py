@@ -14,15 +14,18 @@ RE_OBJ = re.compile(PATTERN)
 @pytest.fixture
 def context():
     return {
-        'full_name': 'Test Author',
-        'github_username': 'lacion',
         'app_name': 'MyTestProject',
         'project_short_description': 'A short description of the project.',
-        "docker_hub_username": "lacion",
-        "docker_image": "lacion/docker-alpine:latest",
-        "docker_build_image": "lacion/docker-alpine:gobuildimage",
-        "use_logrus_logging": "y",
-        "use_viper_config": "y"
+        'squad': 'infra'
+        'use_logrus_logging': 'y',
+        'use_viper_config': 'y',
+        'use_cobra_cmd': 'y',
+        'is_server': 'y',
+        'is_worker': 'y',
+        'connectivity': 'public',
+        'enable_auto_migration': 'y',
+        'enable_uat': 'y',
+        'enable_dev': 'y'
 }
 
 def build_files_list(root_dir):

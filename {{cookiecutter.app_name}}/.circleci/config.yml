@@ -1,28 +1,150 @@
 version: 2.1
 
 orbs:
-  container: kitabisa/container@1.0.0
+  go: kitabisa/go@0.1.0
+  container: kitabisa/container@1.2.0
 
 workflows:
   version: 2
+
+  {% if cookiecutter.enable_dev == "y" -%}
   development:
     jobs:
-      - container/gke-deploy:
+      - go/build:
+          filters:
+              branches:
+                only: /^dev.*/
+
+      - container/build:
           context: gke-dev
+          requires:
+            - go/build
           filters:
             branches:
               only: /^dev.*/
+
+      {% if cookiecutter.enable_auto_migration == "y" -%}
+      - container/migration:
+          context: gke-dev
+          requires:
+            - container/build
+          filters:
+            branches:
+              only: /^dev.*/
+
+      {% endif -%}
+      - container/deploy:
+          context: gke-dev
+          requires:
+            - container/{% if cookiecutter.enable_auto_migration == "y" %}migration{% else %}build{% endif %}
+          filters:
+            branches:
+              only: /^dev.*/
+
+  {% endif -%}
   staging:
     jobs:
-      - container/gke-deploy:
+      - go/build:
+          filters:
+              branches:
+                only: staging
+
+      - container/build:
           context: gke-stg
+          requires:
+            - go/build
           filters:
             branches:
               only: staging
+
+      {% if cookiecutter.enable_auto_migration == "y" -%}
+      - container/migration:
+          context: gke-stg
+          requires:
+            - container/build
+          filters:
+            branches:
+              only: staging
+
+      {% endif -%}
+      - container/deploy:
+          context: gke-stg
+          requires:
+            - container/{% if cookiecutter.enable_auto_migration == "y" %}migration{% else %}build{% endif %}
+          filters:
+            branches:
+              only: staging
+
+  {% if cookiecutter.enable_uat == "y" -%}
+  uat:
+    jobs:
+      - go/build:
+          filters:
+              branches:
+                only: master
+
+      - container/build:
+          context: gke-uat
+          requires:
+            - go/build
+          filters:
+            branches:
+              only: master
+
+      {% if cookiecutter.enable_auto_migration == "y" -%}
+      - container/migration:
+          context: gke-uat
+          requires:
+            - container/build
+          filters:
+            branches:
+              only: master
+
+      {% endif -%}
+      - container/deploy:
+          context: gke-uat
+          requires:
+            - container/{% if cookiecutter.enable_auto_migration == "y" %}migration{% else %}build{% endif %}
+          filters:
+            branches:
+              only: master
+
+  {% endif -%}
   production:
     jobs:
-      - container/gke-deploy:
+      - go/build:
+          filters:
+            tags:
+              only: /^v\d+.\d+.\d+.*/
+            branches:
+              ignore: /.*/
+
+      - container/build:
           context: gke-prod
+          requires:
+            - go/build
+          filters:
+            tags:
+              only: /^v\d+.\d+.\d+.*/
+            branches:
+              ignore: /.*/
+
+      {% if cookiecutter.enable_auto_migration == "y" -%}
+      - container/migration:
+          context: gke-prod
+          requires:
+            - container/build
+          filters:
+            tags:
+              only: /^v\d+.\d+.\d+.*/
+            branches:
+              ignore: /.*/
+
+      {% endif -%}
+      - container/deploy:
+          context: gke-prod
+          requires:
+            - container/{% if cookiecutter.enable_auto_migration == "y" %}migration{% else %}build{% endif %}
           filters:
             tags:
               only: /^v\d+.\d+.\d+.*/

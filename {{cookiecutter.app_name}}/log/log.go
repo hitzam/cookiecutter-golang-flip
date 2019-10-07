@@ -4,7 +4,9 @@ import (
 	"os"
 
 	"github.com/Sirupsen/logrus"
-	{% if cookiecutter.use_viper_config == "y" %}"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/config"{% endif %}
+	{%- if cookiecutter.use_viper_config == "y" %}
+	"github.com/kitabisa/{{cookiecutter.app_name}}/config"
+	{%- endif %}
 )
 
 // Logger defines a set of methods for writing application logs. Derived from and

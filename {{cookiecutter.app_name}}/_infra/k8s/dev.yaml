@@ -38,10 +38,10 @@ ingress:
 ingress:
   tls:
     - hosts:
-        - {{cookiecutter.app_name}}.ktbs.io
+        - {{cookiecutter.app_name}}.ktbs.dev
 
   hosts:
-    - host: {{cookiecutter.app_name}}.ktbs.io
+    - host: {{cookiecutter.app_name}}.ktbs.dev
       path:
         - "/"
 {% endif %}

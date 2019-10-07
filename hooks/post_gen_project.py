@@ -13,6 +13,7 @@ from subprocess import Popen
 # Get the root project directory
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 
+
 def remove_file(filename):
     """
     generic remove file from project dir
@@ -20,6 +21,16 @@ def remove_file(filename):
     fullpath = os.path.join(PROJECT_DIRECTORY, filename)
     if os.path.exists(fullpath):
         os.remove(fullpath)
+
+
+def remove_dir(dirname):
+    """
+    generic remove directory from project dir
+    """
+    shutil.rmtree(os.path.join(
+        PROJECT_DIRECTORY, dirname
+    ))
+
 
 def init_git():
     """
@@ -35,41 +46,26 @@ def init_git():
         git = Popen(command, cwd=PROJECT_DIRECTORY)
         git.wait()
 
-def remove_viper_files():
-    """
-    Removes files needed for viper config utils
-    """
-    shutil.rmtree(os.path.join(
-        PROJECT_DIRECTORY, "config"
-    ))
-
-def remove_logrus_files():
-    """
-    Removes files needed for viper config utils
-    """
-    shutil.rmtree(os.path.join(
-        PROJECT_DIRECTORY, "log"
-    ))
-
-def remove_cobra_files():
-    """
-    Removes files needed for viper config utils
-    """
-    shutil.rmtree(os.path.join(
-        PROJECT_DIRECTORY, "cmd"
-    ))
 
 # 1. Remove viper config if not seleted
 if '{{ cookiecutter.use_viper_config }}'.lower() != 'y':
-    remove_viper_files()
+    remove_dir("config")
 
 # 2. Remove logrus utils if not seleted
 if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y':
-    remove_logrus_files()
+    remove_dir("log")
 
 # 3. Remove cobra utils if not seleted
 if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y':
-    remove_cobra_files()
+    remove_dir("cmd")
 
-# 4. Initialize Git (should be run after all file have been modified or deleted)
+# 4. Remove uat values if not enabled
+if '{{ cookiecutter.enable_uat }}'.lower() != 'y':
+    remove_file("_infra/k8s/uat.yaml")
+
+# 5. Remove dev values if not enabled
+if '{{ cookiecutter.enable_dev }}'.lower() != 'y':
+    remove_file("_infra/k8s/dev.yaml")
+
+# 6. Initialize Git (should be run after all file have been modified or deleted)
 init_git()

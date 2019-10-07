@@ -1,9 +1,10 @@
 package cmd
 
 import (
-        "github.com/spf13/cobra"
-        "fmt"
-        "github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/version"
+	"fmt"
+
+   	"github.com/spf13/cobra"
+	"github.com/kitabisa/{{cookiecutter.app_name}}/version"
 )
 
 // versionCmd represents the version command
