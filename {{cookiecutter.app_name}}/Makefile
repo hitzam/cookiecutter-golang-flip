@@ -1,12 +1,12 @@
 .PHONY: default help install build build-alpine package tag push helm helm-diff test clean
 
 SHELL         = /bin/bash
-APP_NAME      = {{cookiecutter.app_name}}
+APP_NAME      = {{ cookiecutter.app_name }}
 VERSION      := $(shell git describe --always --tags)
 GIT_COMMIT    = $(shell git rev-parse HEAD)
 GIT_DIRTY     = $(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 BUILD_DATE    = $(shell date '+%Y-%m-%d-%H:%M:%S')
-SQUAD         = "{{cookiecutter.squad}}"
+SQUAD         = "{{ cookiecutter.squad }}"
 
 default: help
 
@@ -30,7 +30,7 @@ help:
 build:
 	@echo "building ${APP_NAME} ${VERSION}"
 	@echo "GOPATH=${GOPATH}"
-	go build -ldflags "-X github.com/kitabisa/{{cookiecutter.app_name}}/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/kitabisa/{{cookiecutter.app_name}}/version.Version=${VERSION} -X github.com/kitabisa/{{cookiecutter.app_name}}/version.Environment=${ENVIRONMENT} -X github.com/kitabisa/{{cookiecutter.app_name}}/version.BuildDate=${BUILD_DATE}" -o bin/${APP_NAME}
+	go build -ldflags "-X github.com/kitabisa/{{ cookiecutter.app_name }}/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Version=${VERSION} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Environment=${ENVIRONMENT} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.BuildDate=${BUILD_DATE}" -o bin/${APP_NAME}
 
 package:
 	@echo "building image ${APP_NAME} ${VERSION} ${GIT_COMMIT}"

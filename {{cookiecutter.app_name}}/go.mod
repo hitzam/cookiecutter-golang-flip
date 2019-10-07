@@ -1,4 +1,4 @@
-module github.com/kitabisa/{{cookiecutter.app_name}}
+module github.com/kitabisa/{{ cookiecutter.app_name }}
 
 require (
 	{%- if cookiecutter.use_logrus_logging == "y" %}

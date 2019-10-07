@@ -5,7 +5,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	{%- if cookiecutter.use_viper_config == "y" %}
-	"github.com/kitabisa/{{cookiecutter.app_name}}/config"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	{%- endif %}
 )
 

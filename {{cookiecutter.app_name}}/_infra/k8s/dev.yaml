@@ -63,10 +63,10 @@ ingress:
 
   tls:
     - hosts:
-        - {{cookiecutter.app_name}}.ktbs.dev
+        - {{ cookiecutter.app_name }}.ktbs.dev
 
   hosts:
-    - host: {{cookiecutter.app_name}}.ktbs.dev
+    - host: {{ cookiecutter.app_name }}.ktbs.dev
       path:
         - "/"
 {%- endif %}
