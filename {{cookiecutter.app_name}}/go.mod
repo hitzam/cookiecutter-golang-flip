@@ -10,7 +10,7 @@ require (
 	{%- if cookiecutter.use_cobra_cmd == "y" %}
     github.com/spf13/cobra v0.0.5
     {%- endif %}
-	{%- if cookiecutter.enable_auto_migration == "y" %}
+	{%- if cookiecutter.use_migrate_migration == "y" %}
     github.com/golang-migrate/migrate v4.6.2
     {%- endif %}
 )

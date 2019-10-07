@@ -28,7 +28,7 @@ worker:
       memory: 1Gi
 {%- endif %}
 
-{%- if cookiecutter.enable_auto_migration == "y" %}
+{%- if cookiecutter.use_migrate_migration == "y" %}
 
 migration:
   enabled: true

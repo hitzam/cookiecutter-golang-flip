@@ -20,7 +20,7 @@ help:
 	@echo '    make tag                   Tag image created by package with latest, git commit and version.'
 	@echo '    make push                  Push tagged images to registry.'
 	@echo '    make helm                  Deploy to Kubernetes via Helm.'
-	{% if cookiecutter.enable_auto_migration == "y" %}@echo '    make helm-migration        Run database migration via Helm.'{% endif %}
+	{% if cookiecutter.use_migrate_migration == "y" %}@echo '    make helm-migration        Run database migration via Helm.'{% endif %}
 	@echo '    make run ARGS=             Run with supplied arguments.'
 	@echo '    make test                  Run tests on a compiled project.'
 	@echo '    make clean                 Clean the directory tree.'
@@ -53,7 +53,7 @@ helm:
 		--namespace ${APP_NAME} \
 		--values _infra/k8s/${ENVIRONMENT}.yaml \
 		--set meta.env=${ENVIRONMENT},meta.squad=${SQUAD},meta.version=${VERSION},image.repository=${IMAGE_NAME},image.tag=${VERSION}
-{% if cookiecutter.enable_auto_migration == "y" %}
+{% if cookiecutter.use_migrate_migration == "y" %}
 helm-migration:
 	helm upgrade ${APP_NAME}-migration ${ENVIRONMENT}/migration --install \
 		--namespace ${APP_NAME} \

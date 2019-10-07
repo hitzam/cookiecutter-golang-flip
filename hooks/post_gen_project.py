@@ -59,13 +59,17 @@ if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y':
 if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y':
     remove_dir("cmd")
 
-# 4. Remove uat values if not enabled
+# 4. Remove migrate utils if not selected
+if '{{ cookiecutter.use_migrate_migration }}'.lower() != 'y':
+    remove_dir("migrations")
+
+# 5. Remove uat values if not enabled
 if '{{ cookiecutter.enable_uat }}'.lower() != 'y':
     remove_file("_infra/k8s/uat.yaml")
 
-# 5. Remove dev values if not enabled
+# 6. Remove dev values if not enabled
 if '{{ cookiecutter.enable_dev }}'.lower() != 'y':
     remove_file("_infra/k8s/dev.yaml")
 
-# 6. Initialize Git (should be run after all file have been modified or deleted)
+# 7. Initialize Git (should be run after all file have been modified or deleted)
 init_git()

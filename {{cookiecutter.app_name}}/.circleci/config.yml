@@ -23,7 +23,7 @@ workflows:
             branches:
               only: /^dev.*/
 
-      {% if cookiecutter.enable_auto_migration == "y" -%}
+      {% if cookiecutter.use_migrate_migration == "y" -%}
       - container/migration:
           context: gke-dev
           requires:
@@ -36,7 +36,7 @@ workflows:
       - container/deploy:
           context: gke-dev
           requires:
-            - container/{% if cookiecutter.enable_auto_migration == "y" %}migration{% else %}build{% endif %}
+            - container/{% if cookiecutter.use_migrate_migration == "y" %}migration{% else %}build{% endif %}
           filters:
             branches:
               only: /^dev.*/
@@ -57,7 +57,7 @@ workflows:
             branches:
               only: staging
 
-      {% if cookiecutter.enable_auto_migration == "y" -%}
+      {% if cookiecutter.use_migrate_migration == "y" -%}
       - container/migration:
           context: gke-stg
           requires:
@@ -70,7 +70,7 @@ workflows:
       - container/deploy:
           context: gke-stg
           requires:
-            - container/{% if cookiecutter.enable_auto_migration == "y" %}migration{% else %}build{% endif %}
+            - container/{% if cookiecutter.use_migrate_migration == "y" %}migration{% else %}build{% endif %}
           filters:
             branches:
               only: staging
@@ -91,7 +91,7 @@ workflows:
             branches:
               only: master
 
-      {% if cookiecutter.enable_auto_migration == "y" -%}
+      {% if cookiecutter.use_migrate_migration == "y" -%}
       - container/migration:
           context: gke-uat
           requires:
@@ -104,7 +104,7 @@ workflows:
       - container/deploy:
           context: gke-uat
           requires:
-            - container/{% if cookiecutter.enable_auto_migration == "y" %}migration{% else %}build{% endif %}
+            - container/{% if cookiecutter.use_migrate_migration == "y" %}migration{% else %}build{% endif %}
           filters:
             branches:
               only: master
@@ -129,7 +129,7 @@ workflows:
             branches:
               ignore: /.*/
 
-      {% if cookiecutter.enable_auto_migration == "y" -%}
+      {% if cookiecutter.use_migrate_migration == "y" -%}
       - container/migration:
           context: gke-prod
           requires:
@@ -144,7 +144,7 @@ workflows:
       - container/deploy:
           context: gke-prod
           requires:
-            - container/{% if cookiecutter.enable_auto_migration == "y" %}migration{% else %}build{% endif %}
+            - container/{% if cookiecutter.use_migrate_migration == "y" %}migration{% else %}build{% endif %}
           filters:
             tags:
               only: /^v\d+.\d+.\d+.*/

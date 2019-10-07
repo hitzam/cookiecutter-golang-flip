@@ -68,13 +68,13 @@ Choose from 1, 2, 3 (1, 2, 3) [1]: 1
 use_logrus_logging [y]: y
 use_viper_config [y]: y
 use_cobra_cmd [y]: y
+use_migrate_migration [n]: n
 is_server [y]: y
 Select connectivity:
 1 - public
 2 - private
 Choose from 1, 2 (1, 2) [1]: 1
 is_worker [n]: n
-enable_auto_migration [n]: n
 enable_uat [n]: n
 enable_dev [n]: n
 ```

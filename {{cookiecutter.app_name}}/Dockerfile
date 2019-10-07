@@ -12,7 +12,7 @@ ENV PATH=$PATH:/opt/{{ cookiecutter.app_name }}/bin
 WORKDIR /opt/{{ cookiecutter.app_name }}/bin
 
 COPY ./bin/{{ cookiecutter.app_name }} /opt/{{ cookiecutter.app_name }}/bin/
-{% if cookiecutter.enable_auto_migration == "y" -%}
+{% if cookiecutter.use_migrate_migration == "y" -%}
 COPY ./migrations /opt/{{ cookiecutter.app_name }}/bin/migrations/
 {% endif %}
 RUN chmod +x /opt/{{ cookiecutter.app_name }}/bin/{{ cookiecutter.app_name }}

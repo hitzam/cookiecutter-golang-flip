@@ -19,10 +19,10 @@ def context():
         'use_logrus_logging': 'y',
         'use_viper_config': 'y',
         'use_cobra_cmd': 'y',
+        'use_migrate_migration': 'y',
         'is_server': 'y',
         'is_worker': 'y',
         'connectivity': 'public',
-        'enable_auto_migration': 'y',
         'enable_uat': 'y',
         'enable_dev': 'y'
 }
