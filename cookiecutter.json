@@ -1,13 +1,12 @@
 {
     "app_name": "golangproject",
-    "project_short_description": "A Golang project.",
     "squad": ["backend", "infra", "frontend"],
     "use_logrus_logging": "y",
     "use_viper_config": "y",
     "use_cobra_cmd": "y",
     "is_server": "y",
-    "is_worker": "n",
     "connectivity": ["public", "private"],
+    "is_worker": "n",
     "enable_auto_migration": "n",
     "enable_uat": "n",
     "enable_dev": "n"

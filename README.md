@@ -60,8 +60,7 @@ Warning: After this point, change 'Kitabisa', 'golang-services', etc to your own
 Answer the prompts with your own desired options. For example:
 ```console
 app_name [golangproject]: golang-services
-project_short_description [A Golang Project]: Awesome Golang service
-select_squad:
+Select squad:
 1 - backend
 2 - infra
 3 - frontend
@@ -70,12 +69,14 @@ use_logrus_logging [y]: y
 use_viper_config [y]: y
 use_cobra_cmd [y]: y
 is_server [y]: y
-is_worker [n]: n
-enable_auto_migration [n]: n
 Select connectivity:
 1 - public
 2 - private
 Choose from 1, 2 (1, 2) [1]: 1
+is_worker [n]: n
+enable_auto_migration [n]: n
+enable_uat [n]: n
+enable_dev [n]: n
 ```
 
 Enter the project and take a look around:

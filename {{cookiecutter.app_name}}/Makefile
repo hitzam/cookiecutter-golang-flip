@@ -14,7 +14,6 @@ help:
 	@echo 'Management commands for ${APP_NAME}:'
 	@echo
 	@echo 'Usage:'
-	@echo '    make install               Install the project`s dependencies.'
 	@echo '    make build                 Compile the project.'
 	@echo '    make build-alpine          Compile optimized for Alpine Linux.'
 	@echo '    make package               Build final Docker image with just the Go binary inside.'
@@ -27,9 +26,6 @@ help:
 	@echo '    make clean                 Clean the directory tree.'
 
 	@echo
-
-install:
-	go get -v ./...
 
 build:
 	@echo "building ${APP_NAME} ${VERSION}"

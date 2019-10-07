@@ -15,7 +15,6 @@ RE_OBJ = re.compile(PATTERN)
 def context():
     return {
         'app_name': 'MyTestProject',
-        'project_short_description': 'A short description of the project.',
         'squad': 'infra',
         'use_logrus_logging': 'y',
         'use_viper_config': 'y',
