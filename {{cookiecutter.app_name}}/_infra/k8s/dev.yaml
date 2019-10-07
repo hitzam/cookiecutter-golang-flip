@@ -1,9 +1,10 @@
 configMap:
-  mountPath: /opt/{{cookiecutter.app_name}}/bin/params
+  mountPath: /opt/{{ cookiecutter.app_name }}/bin/params
 
-{% if cookiecutter.is_server != "y" %}app:
+app:
+  {%- if cookiecutter.is_server != "y" %}
   enabled: false
-{% else %}app:
+  {%- else %}
   resources:
     requests:
       cpu: 100m
@@ -11,9 +12,10 @@ configMap:
     limits:
       cpu: 200m
       memory: 1Gi
-{% endif %}
+{%- endif %}
 
-{%- if cookiecutter.is_worker == "y" %}
+{%- if cookiecutter.is_worker == "y" or cookiecutter.is_server != "y" %}
+
 worker:
   enabled: true
 
@@ -24,18 +26,41 @@ worker:
     limits:
       cpu: 200m
       memory: 1Gi
-{% endif %}
+{%- endif %}
+
+{%- if cookiecutter.enable_auto_migration == "y" %}
+
+migration:
+  enabled: true
+
+  configMap: "{{ cookiecutter.app_name }}-app-dev"
+
+  command:
+    - {{ cookiecutter.app_name }}
+    - migrate
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi
+{%- endif %}
 
 {%- if cookiecutter.is_server != "y" %}
+
 service:
   enable: false
-{% endif %}
+{%- endif %}
 
-{%- if cookiecutter.connectivity == "private" %}
 ingress:
+{%- if cookiecutter.is_server != "y" or cookiecutter.connectivity == "private" %}
   enabled: false
 {%- elif cookiecutter.is_server == "y" and cookiecutter.connectivity == "public" %}
-ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/limit-rps: "10"
+
   tls:
     - hosts:
         - {{cookiecutter.app_name}}.ktbs.dev
@@ -44,4 +69,4 @@ ingress:
     - host: {{cookiecutter.app_name}}.ktbs.dev
       path:
         - "/"
-{% endif %}
+{%- endif %}
