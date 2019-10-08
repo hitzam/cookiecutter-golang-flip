@@ -15,7 +15,6 @@ help:
 	@echo
 	@echo 'Usage:'
 	@echo '    make build                 Compile the project.'
-	@echo '    make build-alpine          Compile optimized for Alpine Linux.'
 	@echo '    make package               Build final Docker image with just the Go binary inside.'
 	@echo '    make tag                   Tag image created by package with latest, git commit and version.'
 	@echo '    make push                  Push tagged images to registry.'
