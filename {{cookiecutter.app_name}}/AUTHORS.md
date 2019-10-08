@@ -1,8 +1,8 @@
 # Credits
 
-## Development Lead
+## Developer
 
-- {{ cookiecutter.full_name }} [{{ cookiecutter.github_username }}](https://github.com/{{ cookiecutter.github_username }})
+-  [kitabisa](https://github.com/kitabisa)
 
 ## Contributors
 

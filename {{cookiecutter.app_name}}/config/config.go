@@ -38,13 +38,13 @@ func LoadConfigProvider(appName string) Provider {
 }
 
 func init() {
-	defaultConfig = readViperConfig("{{cookiecutter.app_name|upper}}")
+	defaultConfig = readViperConfig("{{ cookiecutter.app_name | upper }}")
 }
 
 func readViperConfig(appName string) *viper.Viper {
 	v := viper.New()
 	v.AddConfigPath("./params")
-	v.AddConfigPath("/opt/{{cookiecutter.app_name}}/bin/params")
+	v.AddConfigPath("/opt/{{ cookiecutter.app_name }}/bin/params")
 	v.SetEnvPrefix(appName)
 	v.AutomaticEnv()
 

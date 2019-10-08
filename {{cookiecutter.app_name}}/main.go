@@ -3,8 +3,8 @@ package main
 import (
 	{% if cookiecutter.use_cobra_cmd == "n" %}"flag"
 	"fmt"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/version"{% endif %}
-	{% if cookiecutter.use_cobra_cmd == "y" %}"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/cmd"{% endif %}
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/version"{% endif %}
+	{% if cookiecutter.use_cobra_cmd == "y" %}"github.com/kitabisa/{{ cookiecutter.app_name }}/cmd"{% endif %}
 )
 
 func main() {

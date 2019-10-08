@@ -1,17 +1,13 @@
 {
-    "full_name": "Kitabisa",
-    "github_username": "kitabisa",
     "app_name": "golangproject",
-    "project_short_description": "A Golang project.",
-    "squad": ["frontend", "backend", "infra"],
-    "docker_hub_username": "kitabisa",
-    "docker_image": "kitabisa/alpine-base-image:latest",
-    "docker_build_image": "kitabisa/alpine-golang-buildimage",
-    "docker_build_image_version": ["1.12.4", "1.11.9", "1.10.8", "1.9.7"],
+    "squad": ["backend", "infra", "frontend"],
     "use_logrus_logging": "y",
     "use_viper_config": "y",
     "use_cobra_cmd": "y",
+    "use_migrate_migration": "n",
     "is_server": "y",
+    "connectivity": ["public", "private"],
     "is_worker": "n",
-    "connectivity": ["public", "private"]
+    "enable_uat": "n",
+    "enable_dev": "n"
 }

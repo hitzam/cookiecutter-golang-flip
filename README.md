@@ -59,34 +59,24 @@ Warning: After this point, change 'Kitabisa', 'golang-services', etc to your own
 
 Answer the prompts with your own desired options. For example:
 ```console
-full_name [Kitabisa]: Kitabisa
-github_username [kitabisa]: kitabisa
 app_name [golangproject]: golang-services
-project_short_description [A Golang Project]: Awesome Golang service
-select_squad:
-1 - frontend
-2 - backend
-3 - payment
-4 - infra
-Choose from 1, 2, 3, 4 (1, 2, 3, 4) [1]: 4
-docker_hub_username [kitabisa]: kitabisa
-docker_image [kitabisa/alpine-base-image:latest]: kitabisa/alpine-base-image:latest
-docker_build_image [kitabisa/alpine-golang-buildimage]: kitabisa/alpine-golang-buildimage
-docker_build_image_version":
-1 - 1.12.4
-2 - 1.11.9
-3 - 1.10.8
-4 - 1.9.7
-Choose from 1, 2, 3, 4 (1, 2, 3, 4) [1]: 1
+Select squad:
+1 - backend
+2 - infra
+3 - frontend
+Choose from 1, 2, 3 (1, 2, 3) [1]: 1
 use_logrus_logging [y]: y
 use_viper_config [y]: y
 use_cobra_cmd [y]: y
+use_migrate_migration [n]: n
 is_server [y]: y
-is_worker [n]: n
 Select connectivity:
 1 - public
 2 - private
 Choose from 1, 2 (1, 2) [1]: 1
+is_worker [n]: n
+enable_uat [n]: n
+enable_dev [n]: n
 ```
 
 Enter the project and take a look around:

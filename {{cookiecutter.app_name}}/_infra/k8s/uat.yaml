@@ -33,7 +33,7 @@ worker:
 migration:
   enabled: true
 
-  configMap: "{{ cookiecutter.app_name }}-app-stg"
+  configMap: "{{ cookiecutter.app_name }}-app-uat"
 
   command:
     - {{ cookiecutter.app_name }}
@@ -63,10 +63,10 @@ ingress:
 
   tls:
     - hosts:
-        - {{ cookiecutter.app_name }}.ktbs.xyz
+        - {{ cookiecutter.app_name }}.ktbs.us
 
   hosts:
-    - host: {{ cookiecutter.app_name }}.ktbs.xyz
+    - host: {{ cookiecutter.app_name }}.ktbs.us
       path:
         - "/"
 {%- endif %}
