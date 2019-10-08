@@ -6,7 +6,6 @@ orbs:
 
 workflows:
   version: 2
-
   {% if cookiecutter.enable_dev == "y" -%}
   development:
     jobs:

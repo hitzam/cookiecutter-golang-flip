@@ -1,4 +1,4 @@
-.PHONY: default help install build build-alpine package tag push helm helm-diff test clean
+.PHONY: default help build package tag push helm helm-migration run test clean
 
 SHELL         = /bin/bash
 APP_NAME      = {{ cookiecutter.app_name }}
