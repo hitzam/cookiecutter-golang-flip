@@ -8,6 +8,6 @@
     "is_server": "y",
     "connectivity": ["public", "private"],
     "is_worker": "n",
-    "enable_uat": "n",
-    "enable_dev": "n"
+    "enable_uat": "y",
+    "enable_dev": "y"
 }
