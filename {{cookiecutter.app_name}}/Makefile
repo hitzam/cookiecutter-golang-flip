@@ -27,12 +27,11 @@ help:
 	@echo
 
 build:
-	@echo "building ${APP_NAME} ${VERSION}"
-	@echo "GOPATH=${GOPATH}"
+	@echo "Building ${APP_NAME} ${VERSION}"
 	go build -ldflags "-X github.com/kitabisa/{{ cookiecutter.app_name }}/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Version=${VERSION} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Environment=${ENVIRONMENT} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.BuildDate=${BUILD_DATE}" -o bin/${APP_NAME}
 
 package:
-	@echo "building image ${APP_NAME} ${VERSION} ${GIT_COMMIT}"
+	@echo "Building image ${APP_NAME} ${VERSION} ${GIT_COMMIT}"
 	docker build --build-arg VERSION=${VERSION} --build-arg GIT_COMMIT=${GIT_COMMIT}${GIT_DIRTY} -t ${REGISTRY_URL}/${APP_NAME}:local .
 
 tag: package
@@ -48,22 +47,27 @@ push: tag
 	docker push ${REGISTRY_URL}/${APP_NAME}:latest
 
 helm:
+	@echo "Deploying ${APP_NAME} ${VERSION}"
 	helm upgrade ${APP_NAME} ${ENVIRONMENT}/app --install \
 		--namespace ${APP_NAME} \
 		--values _infra/k8s/${ENVIRONMENT}.yaml \
 		--set meta.env=${ENVIRONMENT},meta.squad=${SQUAD},meta.version=${VERSION},image.repository=${IMAGE_NAME},image.tag=${VERSION}
 {% if cookiecutter.use_migrate_migration == "y" %}
 helm-migration:
+	@echo "Migrating database ${APP_NAME} ${VERSION}"
 	helm upgrade ${APP_NAME}-migration ${ENVIRONMENT}/migration --install \
 		--namespace ${APP_NAME} \
 		--values _infra/k8s/${ENVIRONMENT}.yaml \
 		--set meta.env=${ENVIRONMENT},meta.squad=${SQUAD},meta.version=${VERSION},image.repository=${REGISTRY_URL}/${APP_NAME},image.tag=${VERSION}
 {% endif %}
 run: build
+	@echo "Running ${APP_NAME} ${VERSION}"
 	bin/${APP_NAME} ${ARGS}
 
 test:
+	@echo "Testing ${APP_NAME} ${VERSION}"
 	go test ./...
 
 clean:
+	@echo "Removing ${APP_NAME} ${VERSION}"
 	@test ! -e bin/${APP_NAME} || rm bin/${APP_NAME}
