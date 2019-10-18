@@ -10,6 +10,7 @@ workflows:
   development:
     jobs:
       - go/build:
+          context: gke-dev
           filters:
               branches:
                 only: /^dev.*/
@@ -44,6 +45,7 @@ workflows:
   staging:
     jobs:
       - go/build:
+          context: gke-stg
           filters:
               branches:
                 only: staging
@@ -78,6 +80,7 @@ workflows:
   uat:
     jobs:
       - go/build:
+          context: gke-prod
           filters:
               branches:
                 only: master
