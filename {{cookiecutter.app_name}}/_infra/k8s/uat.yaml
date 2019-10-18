@@ -1,5 +1,5 @@
 configMap:
-  mountPath: /opt/{{ cookiecutter.app_name }}/bin/params
+  mountPath: /opt/{{ cookiecutter.app_name }}/params
 
 app:
   {%- if cookiecutter.is_server != "y" %}
