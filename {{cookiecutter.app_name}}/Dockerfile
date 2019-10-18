@@ -7,15 +7,15 @@ LABEL GIT_COMMIT=$GIT_COMMIT
 LABEL VERSION=$VERSION
 
 # Because of https://github.com/docker/docker/issues/14914
-ENV PATH=$PATH:/opt/{{ cookiecutter.app_name }}/bin
+ENV PATH=$PATH:/opt/{{ cookiecutter.app_name }}
 
-WORKDIR /opt/{{ cookiecutter.app_name }}/bin
+WORKDIR /opt/{{ cookiecutter.app_name }}
 
-COPY ./bin/{{ cookiecutter.app_name }} /opt/{{ cookiecutter.app_name }}/bin/
+COPY ./bin/{{ cookiecutter.app_name }} /opt/{{ cookiecutter.app_name }}/
 {% if cookiecutter.use_migrate_migration == "y" -%}
-COPY ./migrations /opt/{{ cookiecutter.app_name }}/bin/migrations/
+COPY ./migrations /opt/{{ cookiecutter.app_name }}/migrations/
 {% endif %}
-RUN chmod +x /opt/{{ cookiecutter.app_name }}/bin/{{ cookiecutter.app_name }}
+RUN chmod +x /opt/{{ cookiecutter.app_name }}/{{ cookiecutter.app_name }}
 
 # Create appuser
 RUN adduser --disabled-password --gecos '' {{ cookiecutter.app_name }}
