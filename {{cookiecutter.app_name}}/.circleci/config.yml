@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  go: kitabisa/go@0.1.0
-  container: kitabisa/container@1.2.0
+  go: kitabisa/go@0.1.2
+  container: kitabisa/container@1.2.1
 
 workflows:
   version: 2
