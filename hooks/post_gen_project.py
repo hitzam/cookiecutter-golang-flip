@@ -61,7 +61,7 @@ if '{{ cookiecutter.use_buroq }}'.lower() != 'y':
     remove_dir("api")
     remove_file("cmd/root_buroq.go")
     remove_file("cmd/migration.go")
-    remove_file("cmd/config_buroq.go")
+    remove_file("config/config_buroq.go")
     remove_file("go_buroq.mod")
     remove_dir("internal")
     remove_dir("migrations/seeds")
@@ -76,7 +76,7 @@ if  '{{ cookiecutter.use_buroq }}'.lower() == 'y':
     remove_dir("log")
 
     rename_file("cmd/root_buroq.go", "cmd/root.go")
-    rename_file("cmd/config_buroq.go", "cmd/config.go")
+    rename_file("config/config_buroq.go", "config/config.go")
     rename_file("go_buroq.mod", "go.mod")
 
 # 1. Remove viper config if not seleted
