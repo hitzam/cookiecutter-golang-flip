@@ -65,6 +65,7 @@ Select squad:
 2 - infra
 3 - frontend
 Choose from 1, 2, 3 (1, 2, 3) [1]: 1
+use_buroq [y]: y
 use_logrus_logging [y]: y
 use_viper_config [y]: y
 use_cobra_cmd [y]: y
