@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/kitabisa/buroq/internal/app/commons"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
 	"github.com/kitabisa/perkakas/v2/log"
 )
 

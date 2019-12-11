@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/kitabisa/buroq/config"
-	"github.com/kitabisa/buroq/internal/app/driver"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/driver"
 	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	"gopkg.in/gorp.v2"
 )

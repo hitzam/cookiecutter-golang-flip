@@ -7,9 +7,9 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/kitabisa/buroq/internal/app/commons"
-	"github.com/kitabisa/buroq/internal/app/handler"
-	"github.com/kitabisa/buroq/internal/app/service"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/handler"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/service"
 	"github.com/sirupsen/logrus"
 )
 

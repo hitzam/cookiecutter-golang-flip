@@ -1,14 +1,14 @@
 [app]
 host = "0.0.0.0"
 port = 4500
-name = "buroq"
+name = "{{ cookiecutter.app_name }}"
 secret = "any_secret"
 
 [postgre]
 is_enabled = false
 host = "your_db_host"
 port = 5432
-name = "buroq"
+name = "{{ cookiecutter.app_name }}"
 username = "your_username"
 password = "your_password"
 pool_size = 5
@@ -17,7 +17,7 @@ pool_size = 5
 is_enabled = false
 host = "your_db_host"
 port = 3306
-name = "buroq"
+name = "{{ cookiecutter.app_name }}"
 username = "your_username"
 password = "your_password"
 conn_open_max = 280 #maximum connection can be open
@@ -48,7 +48,7 @@ is_enabled = false
 host = "your_influx_host"
 user = "your_username"
 pass = "your_password"
-name = "buroq"
+name = "{{ cookiecutter.app_name }}"
 retention_policy = ""
 timeout = "5s"
 insecure_skip_verify = false

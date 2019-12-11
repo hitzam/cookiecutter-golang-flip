@@ -37,8 +37,8 @@ func readViperConfig() *viper.Viper {
 	v := viper.New()
 	v.AddConfigPath(".")
 	v.AddConfigPath("./params")
-	v.AddConfigPath("/opt/buroq/params")
-	v.SetConfigName("buroq")
+	v.AddConfigPath("/opt/{{ cookiecutter.app_name }}/params")
+	v.SetConfigName("{{ cookiecutter.app_name }}")
 
 	err := v.ReadInConfig()
 	if err == nil {

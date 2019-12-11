@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/kitabisa/buroq/config"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 
 	phttp "github.com/kitabisa/perkakas/v2/http"
 	"github.com/kitabisa/perkakas/v2/structs"
