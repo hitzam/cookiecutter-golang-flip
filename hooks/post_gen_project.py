@@ -92,7 +92,7 @@ if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y' and '{{ cookiecutter.use_bu
     remove_dir("cmd")
 
 # 4. Remove migrate utils if not selected
-if '{{ cookiecutter.use_migrate_migration }}'.lower() != 'y' and '{{ cookiecutter.use_buroq }}'.lower() != 'y':
+if '{{ cookiecutter.use_migrate_migration }}'.lower() != 'y':
     remove_dir("migrations")
 
 # 5. Remove uat values if not enabled
