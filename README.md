@@ -65,6 +65,7 @@ Select squad:
 2 - infra
 3 - frontend
 Choose from 1, 2, 3 (1, 2, 3) [1]: 1
+use_buroq [y]: y
 use_logrus_logging [y]: y
 use_viper_config [y]: y
 use_cobra_cmd [y]: y
@@ -78,6 +79,10 @@ is_worker [n]: n
 enable_uat [n]: n
 enable_dev [n]: n
 ```
+
+nb:
+- if **y** on `use_buroq`, then all values for `use_logrus_logging, use_viper_config, use_cobra_cmd` will be **ignored**.
+- migrate function will there if `use_buroq` is **y** and `use_migrate_migration` is **not y**, but there won't be any deployment for it.
 
 Enter the project and take a look around:
 ```console

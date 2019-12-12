@@ -31,6 +31,15 @@ def remove_dir(dirname):
         PROJECT_DIRECTORY, dirname
     ))
 
+def rename_file(filename_before, filename_after):
+    """
+    renaming file
+    """
+    fullpath_before = os.path.join(PROJECT_DIRECTORY, filename_before)
+    if os.path.exists(fullpath_before):
+        fullpath_after = os.path.join(PROJECT_DIRECTORY, filename_after)
+        os.rename(fullpath_before, fullpath_after)
+
 
 def init_git():
     """
@@ -47,8 +56,31 @@ def init_git():
         git.wait()
 
 
+# remove buroq related file/folders if not selected
+if '{{ cookiecutter.use_buroq }}'.lower() != 'y':
+    remove_dir("api")
+    remove_file("cmd/root_buroq.go")
+    remove_file("cmd/migration.go")
+    remove_file("config/config_buroq.go")
+    remove_file("go_buroq.mod")
+    remove_dir("internal")
+    remove_dir("migrations/seeds")
+    remove_dir("migrations/sql")
+    remove_dir("params")
+    remove_dir("pkg")
+
+if  '{{ cookiecutter.use_buroq }}'.lower() == 'y':
+    remove_file("cmd/root.go")
+    remove_file("cmd/config.go")
+    remove_file("go.mod")
+    remove_dir("log")
+
+    rename_file("cmd/root_buroq.go", "cmd/root.go")
+    rename_file("config/config_buroq.go", "config/config.go")
+    rename_file("go_buroq.mod", "go.mod")
+
 # 1. Remove viper config if not seleted
-if '{{ cookiecutter.use_viper_config }}'.lower() != 'y':
+if '{{ cookiecutter.use_viper_config }}'.lower() != 'y' and '{{ cookiecutter.use_buroq }}'.lower() != 'y':
     remove_dir("config")
 
 # 2. Remove logrus utils if not seleted
@@ -56,7 +88,7 @@ if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y':
     remove_dir("log")
 
 # 3. Remove cobra utils if not seleted
-if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y':
+if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y' and '{{ cookiecutter.use_buroq }}'.lower() != 'y':
     remove_dir("cmd")
 
 # 4. Remove migrate utils if not selected

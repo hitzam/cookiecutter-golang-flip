@@ -1,6 +1,7 @@
 {
     "app_name": "golangproject",
     "squad": ["backend", "infra", "frontend"],
+    "use_buroq": "y",
     "use_logrus_logging": "y",
     "use_viper_config": "y",
     "use_cobra_cmd": "y",
