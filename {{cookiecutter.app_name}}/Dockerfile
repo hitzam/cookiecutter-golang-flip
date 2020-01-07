@@ -23,4 +23,4 @@ USER {{ cookiecutter.app_name }}
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-CMD ["/opt/{{ cookiecutter.app_name }}/bin/{{ cookiecutter.app_name }}"]
+CMD ["/opt/{{ cookiecutter.app_name }}/{{ cookiecutter.app_name }}"]
