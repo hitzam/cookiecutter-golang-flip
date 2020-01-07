@@ -67,6 +67,6 @@ ingress:
 
   hosts:
     - host: {{ cookiecutter.app_name }}.ktbs.io
-      path:
+      paths:
         - "/"
 {%- endif %}
