@@ -5,6 +5,15 @@ app:
   {%- if cookiecutter.is_server != "y" %}
   enabled: false
   {%- else %}
+  http:
+    port: 8080
+
+  istio:
+    injected: true
+
+  readiness:
+    path: /healthz
+
   resources:
     requests:
       cpu: 100m
@@ -55,18 +64,33 @@ service:
 {%- endif %}
 
 ingress:
+  enabled: false
+
+virtualService:
 {%- if cookiecutter.is_server != "y" or cookiecutter.connectivity == "private" %}
   enabled: false
 {%- elif cookiecutter.is_server == "y" and cookiecutter.connectivity == "public" %}
-  annotations:
-    nginx.ingress.kubernetes.io/limit-rps: "10"
+  enabled: true
 
-  tls:
-    - hosts:
-        - {{ cookiecutter.app_name }}.ktbs.xyz
+  gateways:
+    - backend-gateway/backend-gateway
 
   hosts:
-    - host: {{ cookiecutter.app_name }}.ktbs.xyz
-      paths:
-        - "/"
+    - geni.ktbs.xyz
+
+  routes:
+    - match:
+        - uri:
+            prefix: /{{ cookiecutter.app_name }}/
+      retries:
+        attempts: 3
+        perTryTimeout: 2s
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: {{ cookiecutter.app_name }}-app-stg
+            port:
+              number: 80
+          weight: 100
 {%- endif %}

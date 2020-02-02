@@ -1,2 +1,18 @@
-bin
-vendor
+vendor/
+bin/
+.idea/
+*.out
+*.log
+*.tmp
+.DS_STORE
+
+# config file
+params/{{ cookiecutter.app_name }}.toml
+
+# executables & libs
+{{ cookiecutter.app_name }}
+*.exe
+*.so
+*.dll
+*.test
+*.dylib
