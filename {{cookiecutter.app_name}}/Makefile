@@ -49,7 +49,6 @@ push: tag
 helm:
 	@echo "Deploying ${APP_NAME} ${VERSION}"
 	helm upgrade ${APP_NAME} kitabisa/app --install \
-		--version 0.12.0-alpha.10 \
 		--namespace ${APP_NAME} \
 		--values _infra/k8s/${ENVIRONMENT}.yaml \
 		--set meta.env=${ENVIRONMENT},meta.squad=${SQUAD},meta.version=${VERSION},image.repository=${REGISTRY_URL}/${APP_NAME},image.tag=${VERSION}
@@ -57,7 +56,6 @@ helm:
 helm-migration:
 	@echo "Migrating database ${APP_NAME} ${VERSION}"
 	helm upgrade ${APP_NAME}-migration kitabisa/migration --install \
-		--version 0.2.0-alpha.3 \
 		--namespace ${APP_NAME} \
 		--values _infra/k8s/${ENVIRONMENT}.yaml \
 		--set meta.env=${ENVIRONMENT},meta.squad=${SQUAD},meta.version=${VERSION},image.repository=${REGISTRY_URL}/${APP_NAME},image.tag=${VERSION}

@@ -11,9 +11,6 @@ app:
   istio:
     injected: true
 
-  readiness:
-    path: /healthz
-
   resources:
     requests:
       cpu: 100m
