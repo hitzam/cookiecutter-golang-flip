@@ -48,14 +48,14 @@ push: tag
 
 helm:
 	@echo "Deploying ${APP_NAME} ${VERSION}"
-	helm upgrade ${APP_NAME} ${ENVIRONMENT}/app --install \
+	helm upgrade ${APP_NAME} kitabisa/app --install \
 		--namespace ${APP_NAME} \
 		--values _infra/k8s/${ENVIRONMENT}.yaml \
 		--set meta.env=${ENVIRONMENT},meta.squad=${SQUAD},meta.version=${VERSION},image.repository=${REGISTRY_URL}/${APP_NAME},image.tag=${VERSION}
 {% if cookiecutter.use_migrate_migration == "y" %}
 helm-migration:
 	@echo "Migrating database ${APP_NAME} ${VERSION}"
-	helm upgrade ${APP_NAME}-migration ${ENVIRONMENT}/migration --install \
+	helm upgrade ${APP_NAME}-migration kitabisa/migration --install \
 		--namespace ${APP_NAME} \
 		--values _infra/k8s/${ENVIRONMENT}.yaml \
 		--set meta.env=${ENVIRONMENT},meta.squad=${SQUAD},meta.version=${VERSION},image.repository=${REGISTRY_URL}/${APP_NAME},image.tag=${VERSION}
