@@ -3,13 +3,11 @@ module github.com/kitabisa/{{ cookiecutter.app_name }}
 go 1.13
 
 require (
-	github.com/go-chi/chi v4.0.2+incompatible
-	github.com/go-gorp/gorp v2.0.0+incompatible // indirect
+	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gobuffalo/packr v1.30.1 // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/gorilla/mux v1.7.3
-	github.com/im7mortal/kmutex v1.0.0
 	github.com/jinzhu/gorm v1.9.11
     github.com/joho/godotenv v1.3.0
 	github.com/kitabisa/perkakas/v2 v2.20.0
