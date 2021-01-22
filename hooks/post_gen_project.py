@@ -84,7 +84,7 @@ if '{{ cookiecutter.use_viper_config }}'.lower() != 'y' and '{{ cookiecutter.use
     remove_dir("config")
 
 # 2. Remove logrus utils if not seleted
-if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y':
+if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y' and '{{ cookiecutter.use_buroq }}'.lower() != 'y':
     remove_dir("log")
 
 # 3. Remove cobra utils if not seleted

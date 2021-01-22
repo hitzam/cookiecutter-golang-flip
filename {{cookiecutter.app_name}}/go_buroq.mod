@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/im7mortal/kmutex v1.0.0
 	github.com/jinzhu/gorm v1.9.11
-	github.com/kitabisa/perkakas/v2 v2.9.3
+	github.com/kitabisa/perkakas/v2 v2.20.0
 	github.com/lib/pq v1.1.1
 	github.com/prometheus/client_golang v0.9.3
 	github.com/rubenv/sql-migrate v0.0.0-20191025130928-9355dd04f4b3
