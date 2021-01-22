@@ -39,7 +39,7 @@ jobs:
       - name: Run Unit tests & calculate coverage
         id: unit-test
         run: |-
-          cp ./params/.env.sample ./params/.env
+          cp ./params/.env.example ./params/.env
           go test -race -covermode=atomic -coverprofile=coverage-reports.out ./...
           echo "::set-output name=totalcoverage::$(go tool cover -func coverage-reports.out | grep total | awk '{print substr($3, 1, length($3)-1)}')"
 

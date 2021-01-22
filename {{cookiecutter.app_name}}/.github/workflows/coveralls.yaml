@@ -34,7 +34,7 @@ jobs:
 
       - name: Run Unit tests
         run: |-
-          cp ./params/hello.toml.sample ./params/hello.toml
+          cp ./params/.env.example ./params/.env
           go test -race -covermode=atomic -coverprofile=profile.cov ./...
 
       - name: Send coverage

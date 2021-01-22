@@ -1,81 +1,54 @@
 # Contributing
 
-Contributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given.
+Contributions are welcome, and they are greatly appreciated. Every little bit helps, and credit will always be given.
 
-You can contribute in many ways:
+## Table of contents
+* [Add new feature](#add-new-feature)
+* [How to deploy](#how-to-deploy)
+* [How to change configuration](#how-to-change-configuration)
 
-## Types of Contributions
+## Add new feature
 
-### Report Bugs
+1. Clone this repo to your local  (if you haven't done this).
+   ```bash
+   $ git clone git@github.com:kitabisa/{{ cookiecutter.app_name }}.git
+   ```
 
-Report bugs at https://github.com/kitabisa/{{ cookiecutter.app_name }}/issues.
+2. Create feature branch.
 
-If you are reporting a bug, please include:
+3. Make your own code. Make sure that you add unit test & pass all scenarios. If pre-commit hook detects that unit test is fail, your code wouldn't be committed.
 
-* Your operating system name and version.
-* Any details about your local setup that might be helpful in troubleshooting.
-* Detailed steps to reproduce the bug.
+4. Once you have finished your code, push your feature branch to `origin` remote.
+   ```bash
+   $ git push [remote-name] [branch-name]
+   ```
 
-### Fix Bugs
+   Example:
+   ```bash
+   $ git push origin new-great-feature
+   ```
 
-Look through the GitHub issues for bugs. Anything tagged with "bug"
-is open to whoever wants to implement it.
+5. Make a pull request from your branch to `main` origin branch.
 
-### Implement Features
+## How to deploy
 
-Look through the GitHub issues for features. Anything tagged with "feature"
-is open to whoever wants to implement it.
+{{ cookiecutter.app_name }} use our new deployment workflow and utilize Github Action as a CI/CD.
 
-### Write Documentation
+1. Deploy to dev&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--> deploy manually using github action `Build-Push-Deploy-Dev`.
+2. Deploy to staging&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--> merge PR to `main` branch and automatically deployed to staging.
+3. Deploy to uat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--> create a release tag and **SELECT IT** as a `pre-release` in the checkbox.
+4. Deploy to production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--> uncheck `pre-release` from the checkbox and publish it.
 
-{{ cookiecutter.app_name }} could always use more documentation, whether as part of the
-official {{ cookiecutter.app_name }} docs, in docstrings, or even on the web in blog posts,
-articles, and such.
+## How to change configuration
 
-### Submit Feedback
+Config file now is updated though `config.yaml` and `secret.yaml` in the `.infra/helm/{environment}/` directory. All changes are now should be done through git. Configurations will be stored as environment variables.
 
-The best way to send feedback is to file an issue at https://github.com/kitabisa/{{ cookiecutter.app_name }}/issues.
+1. Change the configuration in the `.infra/helm/{environment}/config.yaml` file.
+2. Any config related to credential, you should use `.infra/helm/{environment}/secret.yaml`.
+3. If you want to change credential, you should **decrypt** secret file first. It will generate decrypted secret file.
+4. Change your credential in decrypted secret file.
+5. Then encrypt your secret file again.
+6. After all your configurations have been updated, commit them.
+7. And then create PR and deploy it to your desired environment.
 
-If you are proposing a feature:
-
-* Explain in detail how it would work.
-* Keep the scope as narrow as possible, to make it easier to implement.
-* Remember that this is a volunteer-driven project, and that contributions
-  are welcome :)
-
-## Get Started!
-
-Ready to contribute? Here's how to set up `{{ cookiecutter.app_name }}` for local development.
-
-1. Fork the `{{ cookiecutter.app_name }}` repo on GitHub.
-2. Clone your fork locally::
-```bash
-    $ git clone git@github.com:your_name_here/{{ cookiecutter.app_name }}.git
-```
-3. Create a branch for local development::
-```bash
-    $ git checkout -b name-of-your-bugfix-or-feature
-```
-   Now you can make your changes locally.
-
-4. When you're done making changes, check that your changes pass the tests::
-```bash
-    $ make test
-```
-6. Commit your changes and push your branch to GitHub::
-```bash
-    $ git add .
-    $ git commit -m "Your detailed description of your changes."
-    $ git push origin name-of-your-bugfix-or-feature
-```
-7. Submit a pull request through the GitHub website.
-
-Pull Request Guidelines
------------------------
-
-Before you submit a pull request, check that it meets these guidelines:
-
-1. The pull request should include tests.
-2. If the pull request adds functionality, the docs should be updated. Put
-   your new functionality into a function with a docstring, and add the
-   feature to the list in README.md.
+Read [this documentation](https://www.notion.so/How-to-Setup-helm-secrets-010c234f5de848669321c700eb7f7f9c) to know more about encrypting and decrypting secret file.

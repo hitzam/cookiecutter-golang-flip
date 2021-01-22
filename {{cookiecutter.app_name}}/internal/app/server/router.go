@@ -9,7 +9,7 @@ import (
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/handler"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/version"
 	phttp "github.com/kitabisa/perkakas/v2/http"
-	pmiddleware "github.com/kitabisa/perkakas/v2/middleware"
+	// pmiddleware "github.com/kitabisa/perkakas/v2/middleware"
 	pstructs "github.com/kitabisa/perkakas/v2/structs"
 )
 
@@ -22,14 +22,12 @@ func Router(opt handler.HandlerOption) *chi.Mux {
 	})
 	commons.InjectErrors(&handlerCtx)
 
-	logMiddleware := pmiddleware.NewHttpRequestLogger(opt.Logger)
 	// headerCheckMiddleware := pmiddleware.NewHeaderCheck(handlerCtx, cfg.GetString("APP_SECRET"))
 
 	r := chi.NewRouter()
 	// A good base middleware stack (from chi) + middleware from perkakas
 	r.Use(cmiddleware.RequestID)
 	r.Use(cmiddleware.RealIP)
-	r.Use(logMiddleware)
 	// r.Use(headerCheckMiddleware) //use this if you want to use default kitabisa's header
 	r.Use(cmiddleware.Recoverer)
 

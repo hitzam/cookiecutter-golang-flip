@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
 	plog "github.com/kitabisa/perkakas/v2/log"
 )
