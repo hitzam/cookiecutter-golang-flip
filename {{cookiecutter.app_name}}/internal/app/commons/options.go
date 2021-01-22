@@ -15,5 +15,4 @@ type Options struct {
 	DbPostgre *gorp.DbMap
 	CachePool *redis.Pool
 	Influx    *influx.Client
-	Logger    *log.Logger
 }

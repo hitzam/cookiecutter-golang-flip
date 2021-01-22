@@ -16,10 +16,8 @@ def context():
     return {
         'app_name': 'MyTestProject',
         'squad': 'infra',
-        'use_logrus_logging': 'y',
-        'use_viper_config': 'y',
-        'use_cobra_cmd': 'y',
         'use_migrate_migration': 'y',
+        'use_rabbitmq': 'n',
         'is_server': 'y',
         'is_worker': 'y',
         'connectivity': 'public',
@@ -63,7 +61,7 @@ def test_default_configuration(cookies, context):
     check_paths(paths)
 
 
-@pytest.fixture(params=['use_logrus_logging', 'use_viper_config'])
+@pytest.fixture(params=['use_rabbitmq'])
 def feature_context(request, context):
     context.update({request.param: 'n'})
     return context

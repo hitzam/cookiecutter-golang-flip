@@ -1,0 +1,25 @@
+{% raw -%}
+secrets:
+  envFrom:
+    - "{{ .Values.meta.name }}-config-{{ .Values.meta.env }}"
+
+configMaps:
+  envFrom:
+    - "{{ .Values.meta.name }}-config-{{ .Values.meta.env }}"
+{%- endraw %}
+
+worker:
+  enabled: true
+
+  command:
+    - {{ cookiecutter.app_name }}
+  args:
+    - worker
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi

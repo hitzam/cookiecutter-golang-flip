@@ -1,0 +1,11 @@
+{% raw -%}
+meta:
+  name: {{ requiredEnv "APP_NAME" }}
+  env: {{ requiredEnv "ENV" }}
+  version: {{ requiredEnv "VERSION" | quote }}
+  squad: {{ requiredEnv "SQUAD" }}
+
+image:
+  repository: {{ requiredEnv "DOCKER_REPOSITORY" }}/{{ requiredEnv "APP_NAME" }}
+  tag: {{ requiredEnv "VERSION" | quote }}
+{%- endraw %}

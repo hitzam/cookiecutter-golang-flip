@@ -26,8 +26,8 @@ func getErrorResponce(errorCode string) structs.Response {
 	return structs.Response{
 		ResponseCode: errorCode,
 		ResponseDesc: structs.ResponseDesc{
-			ID: cfg.GetString(fmt.Sprintf("%s%s", "response_code.ID.", errorCode)),
-			EN: cfg.GetString(fmt.Sprintf("%s%s", "response_code.EN.", errorCode)),
+			ID: cfg.GetString(fmt.Sprintf("RESPONSE_CODE_ID_%s", errorCode)),
+			EN: cfg.GetString(fmt.Sprintf("RESPONSE_CODE_EN_%s", errorCode)),
 		},
 	}
 }

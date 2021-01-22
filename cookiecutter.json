@@ -1,14 +1,11 @@
 {
     "app_name": "golangproject",
     "squad": ["backend", "infra", "frontend"],
-    "use_buroq": "y",
-    "use_logrus_logging": "n",
-    "use_viper_config": "y",
-    "use_cobra_cmd": "y",
     "use_migrate_migration": "n",
+    "use_rabbitmq": "n",
+    "is_worker": "n",
     "is_server": "y",
     "connectivity": ["public", "private"],
-    "is_worker": "n",
     "enable_uat": "y",
     "enable_dev": "y"
 }

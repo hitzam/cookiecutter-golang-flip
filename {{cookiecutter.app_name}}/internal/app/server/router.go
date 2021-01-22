@@ -23,7 +23,7 @@ func Router(opt handler.HandlerOption) *chi.Mux {
 	commons.InjectErrors(&handlerCtx)
 
 	logMiddleware := pmiddleware.NewHttpRequestLogger(opt.Logger)
-	// headerCheckMiddleware := pmiddleware.NewHeaderCheck(handlerCtx, cfg.GetString("app.secret"))
+	// headerCheckMiddleware := pmiddleware.NewHeaderCheck(handlerCtx, cfg.GetString("APP_SECRET"))
 
 	r := chi.NewRouter()
 	// A good base middleware stack (from chi) + middleware from perkakas
@@ -37,7 +37,6 @@ func Router(opt handler.HandlerOption) *chi.Mux {
 	phandler := phttp.NewHttpHandler(handlerCtx)
 
 	healthCheckHandler := handler.HealthCheckHandler{}
-
 	healthCheckHandler.HandlerOption = opt
 	healthCheckHandler.Handler = phandler(healthCheckHandler.HealthCheck)
 

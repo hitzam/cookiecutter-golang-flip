@@ -12,29 +12,31 @@ type HealthCheckHandler struct {
 
 // HealthCheck checking if all work well
 func (h HealthCheckHandler) HealthCheck(w http.ResponseWriter, r *http.Request) (data interface{}, pageToken *string, err error) {
-	if h.HandlerOption.Config.GetBool("mysql.is_enabled") {
-		err = h.Services.HealthCheck.HealthCheckDbMysql()
+	ctx := r.Context()
+
+	if h.HandlerOption.Config.GetBool("MYSQL_IS_ENABLED") {
+		err = h.Services.HealthCheck.HealthCheckDbMysql(ctx)
 		if err != nil {
 			return
 		}
 	}
 
-	if h.HandlerOption.Config.GetBool("postgre.is_enabled") {
-		err = h.Services.HealthCheck.HealthCheckDbPostgres()
+	if h.HandlerOption.Config.GetBool("POSTGRE_IS_ENABLED") {
+		err = h.Services.HealthCheck.HealthCheckDbPostgres(ctx)
 		if err != nil {
 			return
 		}
 	}
 
-	if h.HandlerOption.Config.GetBool("cache.is_enabled") {
-		err = h.Services.HealthCheck.HealthCheckDbCache()
+	if h.HandlerOption.Config.GetBool("CACHE_IS_ENABLED") {
+		err = h.Services.HealthCheck.HealthCheckDbCache(ctx)
 		if err != nil {
 			return
 		}
 	}
 
-	if h.HandlerOption.Config.GetBool("influx.is_enabled") {
-		err = h.Services.HealthCheck.HealthCheckInflux()
+	if h.HandlerOption.Config.GetBool("INFLUX_IS_ENABLED") {
+		err = h.Services.HealthCheck.HealthCheckInflux(ctx)
 		if err != nil {
 			return
 		}

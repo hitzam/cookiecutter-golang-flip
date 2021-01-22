@@ -1,73 +1,101 @@
-.PHONY: default help build package tag push helm helm-migration run test clean
-
 SHELL         = /bin/bash
 APP_NAME      = {{ cookiecutter.app_name }}
-VERSION      := $(shell git describe --always --tags)
+VERSION       = $(shell git describe --always --tags)
 GIT_COMMIT    = $(shell git rev-parse HEAD)
 GIT_DIRTY     = $(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 BUILD_DATE    = $(shell date '+%Y-%m-%d-%H:%M:%S')
 SQUAD         = "{{ cookiecutter.squad }}"
 
+.PHONY: default
 default: help
 
+.PHONY: help
 help:
 	@echo 'Management commands for ${APP_NAME}:'
 	@echo
 	@echo 'Usage:'
-	@echo '    make build                 Compile the project.'
-	@echo '    make package               Build final Docker image with just the Go binary inside.'
-	@echo '    make tag                   Tag image created by package with latest, git commit and version.'
-	@echo '    make push                  Push tagged images to registry.'
-	@echo '    make helm                  Deploy to Kubernetes via Helm.'
-	{% if cookiecutter.use_migrate_migration == "y" %}@echo '    make helm-migration        Run database migration via Helm.'{% endif %}
-	@echo '    make run ARGS=             Run with supplied arguments.'
-	@echo '    make test                  Run tests on a compiled project.'
-	@echo '    make clean                 Clean the directory tree.'
-
+	@echo '    make build                             Compile the project.'
+	@echo '    make package                           Build, tag, and push Docker image.'
+	@echo '    make deploy                            Deploy to Kubernetes via Helmfile.'
+	@echo '    make rollback RELEASE= REVISION=       Rollback via Helm. If REVISION is omitted, it will roll back to the previous release.'
+	@echo '    make run ARGS=                         Run with supplied arguments.'
+	@echo '    make test                              Run tests on a compiled project.'
+	@echo '    make clean                             Clean the directory tree.'
 	@echo
 
+.PHONY: build
 build:
 	@echo "Building ${APP_NAME} ${VERSION}"
-	go build -ldflags "-w -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Version=${VERSION} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Environment=${ENVIRONMENT} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.BuildDate=${BUILD_DATE}" -o bin/${APP_NAME}
+	go build -ldflags "-w -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Version=${VERSION} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Environment=${ENV} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.BuildDate=${BUILD_DATE}" -o bin/${APP_NAME}
 
+.PHONY: package
 package:
-	@echo "Building image ${APP_NAME} ${VERSION} ${GIT_COMMIT}"
-	docker build --build-arg VERSION=${VERSION} --build-arg GIT_COMMIT=${GIT_COMMIT}${GIT_DIRTY} -t ${REGISTRY_URL}/${APP_NAME}:local .
+	@echo "Build, tag, and push Docker image ${APP_NAME} ${VERSION} ${GIT_COMMIT}"
+	docker buildx build \
+		--build-arg VERSION=${VERSION},GIT_COMMIT=${GIT_COMMIT}${GIT_DIRTY} \
+		--cache-from type=local,src=/tmp/.buildx-cache \
+		--cache-to type=local,dest=/tmp/.buildx-cache \
+		--tag ${DOCKER_REPOSITORY}/${APP_NAME}:${GIT_COMMIT} \
+		--tag ${DOCKER_REPOSITORY}/${APP_NAME}:${VERSION} \
+		--tag ${DOCKER_REPOSITORY}/${APP_NAME}:latest \
+		--push .
 
-tag: package
-	@echo "Tagging: latest ${VERSION} ${GIT_COMMIT}"
-	docker tag ${REGISTRY_URL}/${APP_NAME}:local ${REGISTRY_URL}/${APP_NAME}:${GIT_COMMIT}
-	docker tag ${REGISTRY_URL}/${APP_NAME}:local ${REGISTRY_URL}/${APP_NAME}:${VERSION}
-	docker tag ${REGISTRY_URL}/${APP_NAME}:local ${REGISTRY_URL}/${APP_NAME}:latest
-
-push: tag
-	@echo "Pushing Docker image to registry: latest ${VERSION} ${GIT_COMMIT}"
-	docker push ${REGISTRY_URL}/${APP_NAME}:${GIT_COMMIT}
-	docker push ${REGISTRY_URL}/${APP_NAME}:${VERSION}
-	docker push ${REGISTRY_URL}/${APP_NAME}:latest
-
-helm:
+.PHONY: deploy
+deploy:
 	@echo "Deploying ${APP_NAME} ${VERSION}"
-	helm upgrade ${APP_NAME} kitabisa/app --install \
+	export APP_NAME=${APP_NAME} && \
+	export VERSION=${VERSION} && \
+	export SQUAD=${SQUAD} && \
+	helmfile apply
+
+.PHONY: helm-history-length
+helm-history-length:
+	@helm history \
 		--namespace ${APP_NAME} \
-		--values _infra/k8s/${ENVIRONMENT}.yaml \
-		--set meta.env=${ENVIRONMENT},meta.squad=${SQUAD},meta.version=${VERSION},image.repository=${REGISTRY_URL}/${APP_NAME},image.tag=${VERSION}
-{% if cookiecutter.use_migrate_migration == "y" %}
-helm-migration:
-	@echo "Migrating database ${APP_NAME} ${VERSION}"
-	helm upgrade ${APP_NAME}-migration kitabisa/migration --install \
+		--output yaml \
+		${APP_NAME}-server-${ENV} | yq r - --length
+
+.PHONY: helm-oldest-revision
+helm-oldest-revision:
+	@helm history \
 		--namespace ${APP_NAME} \
-		--values _infra/k8s/${ENVIRONMENT}.yaml \
-		--set meta.env=${ENVIRONMENT},meta.squad=${SQUAD},meta.version=${VERSION},image.repository=${REGISTRY_URL}/${APP_NAME},image.tag=${VERSION}
-{% endif %}
+		--output yaml \
+		${APP_NAME}-server-${ENV} | yq r - "[0]".revision
+
+.PHONY: helm-image-tag
+helm-image-tag:
+	@helm get values \
+		--namespace ${APP_NAME} \
+		--revision ${REVISION} \
+		--output yaml \
+		${APP_NAME}-server-${ENV} | yq r - image.tag
+
+.PHONY: prune
+prune:
+	@echo "Removing Docker image ${DOCKER_REPOSITORY}/${APP_NAME}:${IMAGE_TAG}"
+	gcloud container images delete \
+		--force-delete-tags \
+		--quiet \
+		${DOCKER_REPOSITORY}/${APP_NAME}:${IMAGE_TAG}
+
+.PHONY: rollback
+rollback:
+	@echo "Rollback ${RELEASE} ${REVISION}"
+	helm rollback \
+		--namespace ${APP_NAME} \
+		${RELEASE} ${REVISION}
+
+.PHONY: run
 run: build
 	@echo "Running ${APP_NAME} ${VERSION}"
 	bin/${APP_NAME} ${ARGS}
 
+.PHONY: test
 test:
 	@echo "Testing ${APP_NAME} ${VERSION}"
-	go test ./...
+	go test -race ./...
 
+.PHONY: clean
 clean:
 	@echo "Removing ${APP_NAME} ${VERSION}"
 	@test ! -e bin/${APP_NAME} || rm bin/${APP_NAME}

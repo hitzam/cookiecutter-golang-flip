@@ -50,26 +50,26 @@ func (a *AppContext) GetDBInstance(dbType string) (*gorp.DbMap, error) {
 
 func (a *AppContext) getMysqlOption() driver.DBMysqlOption {
 	return driver.DBMysqlOption{
-		Host:                 a.config.GetString("mysql.host"),
-		Port:                 a.config.GetInt("mysql.port"),
-		Username:             a.config.GetString("mysql.username"),
-		Password:             a.config.GetString("mysql.password"),
-		DBName:               a.config.GetString("mysql.name"),
-		AdditionalParameters: a.config.GetString("mysql.additional_parameters"),
-		MaxOpenConns:         a.config.GetInt("mysql.conn_open_max"),
-		MaxIdleConns:         a.config.GetInt("mysql.conn_idle_max"),
-		ConnMaxLifetime:      a.config.GetDuration("mysql.conn_lifetime_max"),
+		Host:                 a.config.GetString("MYSQL_HOST"),
+		Port:                 a.config.GetInt("MYSQL_PORT"),
+		Username:             a.config.GetString("MYSQL_USERNAME"),
+		Password:             a.config.GetString("MYSQL_PASSWORD"),
+		DBName:               a.config.GetString("MYSQL_DB_NAME"),
+		AdditionalParameters: a.config.GetString("MYSQL_ADDITIONAL_PARAMS"),
+		MaxOpenConns:         a.config.GetInt("MYSQL_MAX_OPEN_CONNECTION"),
+		MaxIdleConns:         a.config.GetInt("MYSQL_MAX_IDLE_CONNECTION"),
+		ConnMaxLifetime:      a.config.GetDuration("MYSQL_CONNECTION_MAX_LIFETIME"),
 	}
 }
 
 func (a *AppContext) getPostgreOption() driver.DBPostgreOption {
 	return driver.DBPostgreOption{
-		Host:        a.config.GetString("postgre.host"),
-		Port:        a.config.GetInt("postgre.port"),
-		Username:    a.config.GetString("postgre.username"),
-		Password:    a.config.GetString("postgre.password"),
-		DBName:      a.config.GetString("postgre.name"),
-		MaxPoolSize: a.config.GetInt("postgre.pool_size"),
+		Host:        a.config.GetString("POSTGRE_HOST"),
+		Port:        a.config.GetInt("POSTGRE_PORT"),
+		Username:    a.config.GetString("POSTGRE_USERNAME"),
+		Password:    a.config.GetString("POSTGRE_PASSWORD"),
+		DBName:      a.config.GetString("POSTGRE_DB_NAME"),
+		MaxPoolSize: a.config.GetInt("POSTGRE_POOL_SIZE"),
 	}
 }
 
@@ -80,31 +80,31 @@ func (a *AppContext) GetCachePool() *redis.Pool {
 
 func (a *AppContext) getCacheOption() driver.CacheOption {
 	return driver.CacheOption{
-		Host:               a.config.GetString("cache.host"),
-		Port:               a.config.GetInt("cache.port"),
-		Namespace:          a.config.GetString("cache.namespace"),
-		Password:           a.config.GetString("cache.password"),
-		DialConnectTimeout: a.config.GetDuration("cache.dial_connect_timeout"),
-		ReadTimeout:        a.config.GetDuration("cache.read_timeout"),
-		WriteTimeout:       a.config.GetDuration("cache.write_timeout"),
-		IdleTimeout:        a.config.GetDuration("cache.idle_timeout"),
-		MaxConnLifetime:    a.config.GetDuration("cache.conn_lifetime_max"),
-		MaxIdle:            a.config.GetInt("cache.conn_idle_max"),
-		MaxActive:          a.config.GetInt("cache.conn_active_max"),
-		Wait:               a.config.GetBool("cache.is_wait"),
+		Host:               a.config.GetString("CACHE_HOST"),
+		Port:               a.config.GetInt("CACHE_PORT"),
+		Namespace:          a.config.GetString("CACHE_NAMESPACE"),
+		Password:           a.config.GetString("CACHE_PASSWORD"),
+		DialConnectTimeout: a.config.GetDuration("CACHE_DIAL_CONNECT_TIMEOUT"),
+		ReadTimeout:        a.config.GetDuration("CACHE_READ_TIMEOUT"),
+		WriteTimeout:       a.config.GetDuration("CACHE_WRITE_TIMEOUT"),
+		IdleTimeout:        a.config.GetDuration("CACHE_IDLE_TIMEOUT"),
+		MaxConnLifetime:    a.config.GetDuration("CACHE_CONNECTION_MAX_LIFETIME"),
+		MaxIdle:            a.config.GetInt("CACHE_MAX_IDLE_CONNECTION"),
+		MaxActive:          a.config.GetInt("CACHE_MAX_ACTIVE_CONNECTION"),
+		Wait:               a.config.GetBool("CACHE_IS_WAIT"),
 	}
 }
 
 // GetInfluxDBClient get Influx DB client
 func (a *AppContext) GetInfluxDBClient() (c *influx.Client, err error) {
 	influxConfig := influx.ClientConfig{
-		Addr:               a.config.GetString("influx.host"),
-		Username:           a.config.GetString("influx.user"),
-		Password:           a.config.GetString("influx.pass"),
-		Database:           a.config.GetString("influx.name"),
-		RetentionPolicy:    a.config.GetString("influx.retention_policy"),
-		Timeout:            a.config.GetDuration("influx.timeout"),
-		InsecureSkipVerify: a.config.GetBool("influx.insecure_skip_verify"),
+		Addr:               a.config.GetString("INFLUX_HOST"),
+		Username:           a.config.GetString("INFLUX_USERNAME"),
+		Password:           a.config.GetString("INFLUX_PASSWORD"),
+		Database:           a.config.GetString("INFLUX_DB_NAME"),
+		RetentionPolicy:    a.config.GetString("INFLUX_RETENTION_POLICY"),
+		Timeout:            a.config.GetDuration("INFLUX_TIMEOUT"),
+		InsecureSkipVerify: a.config.GetBool("INFLUX_INSECURE_SKIP_VERIFY"),
 	}
 
 	return influx.NewClient(influxConfig)

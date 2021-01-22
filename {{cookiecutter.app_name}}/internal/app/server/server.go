@@ -49,7 +49,7 @@ func (s *server) StartApp() {
 		close(idleConnectionClosed)
 	}()
 
-	srv.Addr = fmt.Sprintf("%s:%d", s.opt.Config.GetString("app.host"), s.opt.Config.GetInt("app.port"))
+	srv.Addr = fmt.Sprintf("%s:%d", s.opt.Config.GetString("APP_HOST"), s.opt.Config.GetInt("APP_PORT"))
 	hOpt := handler.HandlerOption{
 		Options:  s.opt,
 		Services: s.services,
