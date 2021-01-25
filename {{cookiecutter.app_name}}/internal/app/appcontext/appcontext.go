@@ -6,7 +6,6 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/driver"
-	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	"gopkg.in/gorp.v3"
 )
 
@@ -93,19 +92,4 @@ func (a *AppContext) getCacheOption() driver.CacheOption {
 		MaxActive:          a.config.GetInt("CACHE_MAX_ACTIVE_CONNECTION"),
 		Wait:               a.config.GetBool("CACHE_IS_WAIT"),
 	}
-}
-
-// GetInfluxDBClient get Influx DB client
-func (a *AppContext) GetInfluxDBClient() (c *influx.Client, err error) {
-	influxConfig := influx.ClientConfig{
-		Addr:               a.config.GetString("INFLUX_HOST"),
-		Username:           a.config.GetString("INFLUX_USERNAME"),
-		Password:           a.config.GetString("INFLUX_PASSWORD"),
-		Database:           a.config.GetString("INFLUX_DB_NAME"),
-		RetentionPolicy:    a.config.GetString("INFLUX_RETENTION_POLICY"),
-		Timeout:            a.config.GetDuration("INFLUX_TIMEOUT"),
-		InsecureSkipVerify: a.config.GetBool("INFLUX_INSECURE_SKIP_VERIFY"),
-	}
-
-	return influx.NewClient(influxConfig)
 }

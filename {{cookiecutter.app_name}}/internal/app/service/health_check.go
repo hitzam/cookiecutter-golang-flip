@@ -12,7 +12,6 @@ type IHealthCheck interface {
 	HealthCheckDbMysql(ctx context.Context) (err error)
 	HealthCheckDbPostgres(ctx context.Context) (err error)
 	HealthCheckDbCache(ctx context.Context) (err error)
-	HealthCheckInflux(ctx context.Context) (err error)
 }
 
 type healthCheck struct {
@@ -56,14 +55,4 @@ func (h *healthCheck) HealthCheckDbCache(ctx context.Context) (err error) {
 	}
 
 	return nil
-}
-
-func (h *healthCheck) HealthCheckInflux(ctx context.Context) (err error) {
-	err = h.opt.Influx.Ping()
-	if err != nil {
-		plog.Zlogger(ctx).Err(err).Send()
-		err = commons.ErrInfluxConn
-	}
-
-	return
 }

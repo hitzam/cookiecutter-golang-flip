@@ -35,12 +35,5 @@ func (h HealthCheckHandler) HealthCheck(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
-	if h.HandlerOption.Config.GetBool("INFLUX_IS_ENABLED") {
-		err = h.Services.HealthCheck.HealthCheckInflux(ctx)
-		if err != nil {
-			return
-		}
-	}
-
 	return
 }

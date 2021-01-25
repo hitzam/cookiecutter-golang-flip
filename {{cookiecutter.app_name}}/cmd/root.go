@@ -11,7 +11,6 @@ import (
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/repository"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/server"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/service"
-	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"gopkg.in/gorp.v3"
@@ -78,27 +77,11 @@ func start() {
 		defer cacheConn.Close()
 	}
 
-	var influx *influx.Client
-	if cfg.GetBool("INFLUX_IS_ENABLED") {
-		influx, err = app.GetInfluxDBClient()
-		if err != nil {
-			logrus.Fatalf("Failed to start, error connect to DB Influx | %v", err)
-			return
-		}
-
-		err = influx.Ping()
-		if err != nil {
-			logrus.Fatalf("Failed to start, error connect to DB Influx | %v", err)
-			return
-		}
-	}
-
 	opt := commons.Options{
 		Config:    cfg,
 		DbMysql:   dbMysql,
 		DbPostgre: dbPostgre,
 		CachePool: cache,
-		Influx:    influx,
 	}
 
 	repo := wiringRepository(repository.Option{
