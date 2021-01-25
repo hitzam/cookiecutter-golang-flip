@@ -89,6 +89,7 @@ if '{{ cookiecutter.use_migrate_migration }}'.lower() != 'y':
 
 # 5. Remove worker if not selected
 if '{{ cookiecutter.is_worker }}'.lower() != 'y':
+    remove_file("cmd/worker.go")
     remove_file(".infra/helm/stg/worker.yaml")
     remove_file(".infra/helm/prod/worker.yaml")
 

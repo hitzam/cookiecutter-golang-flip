@@ -23,7 +23,9 @@ var rootCmd = &cobra.Command{
 	Short: "A brief description of your application",
 	Long: `A longer description that spans multiple lines and likely contains examples and usage of using your application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		{% if cookiecutter.is_server == "y" -%}
 		start()
+		{%- endif %}
 	},
 }
 
@@ -40,6 +42,7 @@ func init() {
 	cobra.OnInitialize()
 }
 
+{% if cookiecutter.is_server == "y" -%}
 func start() {
 	cfg := config.Config()
 
@@ -132,3 +135,4 @@ func wiringService(serviceOption service.Option) *service.Services {
 	}
 	return &svc
 }
+{%- endif %}
