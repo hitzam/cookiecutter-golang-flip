@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq" // defines postgreSQL driver used
-	"gopkg.in/gorp.v2"
+	"gopkg.in/gorp.v3"
 )
 
 // DBPostgreOption options for postgre connection

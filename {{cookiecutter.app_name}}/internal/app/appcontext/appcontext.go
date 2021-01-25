@@ -7,7 +7,7 @@ import (
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/driver"
 	"github.com/kitabisa/perkakas/v2/metrics/influx"
-	"gopkg.in/gorp.v2"
+	"gopkg.in/gorp.v3"
 )
 
 const (

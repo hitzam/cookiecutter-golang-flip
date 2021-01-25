@@ -4,7 +4,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	"github.com/kitabisa/perkakas/v2/metrics/influx"
-	"gopkg.in/gorp.v2"
+	"gopkg.in/gorp.v3"
 )
 
 // Options common option for all object that needed
