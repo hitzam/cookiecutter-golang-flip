@@ -21,8 +21,6 @@ def context():
         'is_server': 'y',
         'is_worker': 'y',
         'connectivity': 'public',
-        'enable_uat': 'y',
-        'enable_dev': 'y'
     }
 
 

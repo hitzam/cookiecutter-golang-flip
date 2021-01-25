@@ -5,7 +5,5 @@
     "use_rabbitmq": "n",
     "is_worker": "n",
     "is_server": "y",
-    "connectivity": ["public", "private"],
-    "enable_uat": "y",
-    "enable_dev": "y"
+    "connectivity": ["public", "private"]
 }
