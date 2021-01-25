@@ -7,8 +7,8 @@ import (
 
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/appcontext"
-	"github.com/kitabisa/perkakas/v2/log"
 	migrate "github.com/rubenv/sql-migrate"
+	plog "github.com/kitabisa/perkakas/v2/log"
 	"github.com/spf13/cobra"
 )
 
@@ -19,11 +19,10 @@ var migrateUpCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		c := config.Config()
 		appCtx := appcontext.NewAppContext(c)
-		logger := log.NewLogger("{{ cookiecutter.app_name }}-migrate")
 		mSource := getMigrateSource()
 
-		doMigrate(appCtx, logger, mSource, appcontext.DBDialectMysql, migrate.Up)
-		doMigrate(appCtx, logger, mSource, appcontext.DBDialectPostgres, migrate.Up)
+		doMigrate(appCtx, mSource, appcontext.DBDialectMysql, migrate.Up)
+		doMigrate(appCtx, mSource, appcontext.DBDialectPostgres, migrate.Up)
 	},
 }
 
@@ -34,11 +33,10 @@ var migrateDownCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		c := config.Config()
 		appCtx := appcontext.NewAppContext(c)
-		logger := log.NewLogger("{{ cookiecutter.app_name }}-migrate")
 		mSource := getMigrateSource()
 
-		doMigrate(appCtx, logger, mSource, appcontext.DBDialectMysql, migrate.Down)
-		doMigrate(appCtx, logger, mSource, appcontext.DBDialectPostgres, migrate.Down)
+		doMigrate(appCtx, mSource, appcontext.DBDialectMysql, migrate.Down)
+		doMigrate(appCtx, mSource, appcontext.DBDialectPostgres, migrate.Down)
 	},
 }
 
@@ -48,10 +46,9 @@ var migrateNewCmd = &cobra.Command{
 	Long:  `Create new migration file on folder migrations/sql with timestamp as prefix`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		logger := log.NewLogger("{{ cookiecutter.app_name }}-migrate")
 		mDir := "migrations/sql/"
 
-		createMigrationFile(logger, mDir, args[0])
+		createMigrationFile(mDir, args[0])
 	},
 }
 
@@ -69,10 +66,10 @@ func getMigrateSource() migrate.FileMigrationSource {
 	return source
 }
 
-func doMigrate(appCtx *appcontext.AppContext, logger *log.Logger, mSource migrate.FileMigrationSource, dbDialect string, direction migrate.MigrationDirection) error {
+func doMigrate(appCtx *appcontext.AppContext, mSource migrate.FileMigrationSource, dbDialect string, direction migrate.MigrationDirection) error {
 	db, err := appCtx.GetDBInstance(dbDialect)
 	if err != nil {
-		logger.AddMessage(log.FatalLevel, fmt.Sprintf("Error connection to DB | %v", err)).Print()
+		plog.Zlogger(context.Background()).Fatal().Err(err).Msg("Error connection to DB")
 		return err
 	}
 
@@ -80,11 +77,11 @@ func doMigrate(appCtx *appcontext.AppContext, logger *log.Logger, mSource migrat
 
 	total, err := migrate.Exec(db.Db, dbDialect, mSource, direction)
 	if err != nil {
-		logger.AddMessage(log.ErrorLevel, fmt.Sprintf("Fail migration | %v", err)).Print()
+		plog.Zlogger(context.Background()).Err(err).Msg("Fail migration")
 		return err
 	}
 
-	logger.AddMessage(log.InfoLevel, fmt.Sprintf("Migrate Success, total migrated: %d", total)).Print()
+	plog.Zlogger(context.Background()).Info().Msgf("Migrate Success, total migrated: %d", total)
 	return nil
 }
 
@@ -102,7 +99,7 @@ func createMigrationFile(logger *log.Logger, mDir string, mName string) error {
 
 	f, err := os.Create(filepath)
 	if err != nil {
-		logger.AddMessage(log.ErrorLevel, fmt.Sprintf("Error create migration file | %v", err)).Print()
+		plog.Zlogger(context.Background()).Err(err).Str("filepath", filepath).Msg("Error create migration file")
 		return err
 	}
 	defer f.Close()
@@ -110,6 +107,6 @@ func createMigrationFile(logger *log.Logger, mDir string, mName string) error {
 	f.WriteString(migrationContent)
 	f.Sync()
 
-	logger.AddMessage(log.InfoLevel, fmt.Sprintf("New migration file has been created: %s)", filepath)).Print()
+	plog.Zlogger(context.Background()).Info().Str("filepath", filepath).Msg("New migration file has been created")
 	return nil
 }
