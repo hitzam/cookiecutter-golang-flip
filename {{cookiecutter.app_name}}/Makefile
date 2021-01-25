@@ -19,8 +19,9 @@ help:
 	@echo '    make deploy                            Deploy to Kubernetes via Helmfile.'
 	@echo '    make rollback RELEASE= REVISION=       Rollback via Helm. If REVISION is omitted, it will roll back to the previous release.'
 	@echo '    make run ARGS=                         Run with supplied arguments.'
-	@echo '    make test                              Run tests on a compiled project.'
-	@echo '    make clean                             Clean the directory tree.'
+	@echo '    make test                              Run unit-tests on a this project.'
+	@echo '    make coverage                          Show your unit-test code coverage.'
+	@echo '    make clean                             Clean the binary directory tree.'
 	@echo
 
 .PHONY: build
@@ -94,6 +95,11 @@ run: build
 test:
 	@echo "Testing ${APP_NAME} ${VERSION}"
 	go test -race ./...
+
+.PHONY: coverage
+coverage:
+	go test -race -coverprofile=coverage-reports.out ./...
+	go tool cover -html=coverage-reports.out
 
 .PHONY: clean
 clean:
