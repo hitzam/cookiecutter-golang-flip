@@ -22,7 +22,7 @@ func Router(opt handler.HandlerOption) *chi.Mux {
 	})
 	commons.InjectErrors(&handlerCtx)
 
-	// headerCheckMiddleware := pmiddleware.NewHeaderCheck(handlerCtx, cfg.GetString("APP_SECRET"))
+	// headerCheckMiddleware := pmiddleware.NewHeaderCheck(handlerCtx, opt.AppCtx.GetAppOption().Secret)
 
 	r := chi.NewRouter()
 	// A good base middleware stack (from chi) + middleware from perkakas

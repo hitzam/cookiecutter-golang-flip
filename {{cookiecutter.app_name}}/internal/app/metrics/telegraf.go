@@ -9,9 +9,9 @@ import (
 
 // TelegrafOption defines options for telegraf
 type TelegrafOption struct {
-	Enabled bool
-	Host    string
-	Port    int
+	IsEnabled bool
+	Host      string
+	Port      int
 }
 
 // IMetric ...

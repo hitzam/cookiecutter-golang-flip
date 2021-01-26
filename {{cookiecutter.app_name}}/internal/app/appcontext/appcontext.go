@@ -3,7 +3,6 @@ package appcontext
 import (
 	"errors"
 
-	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/driver"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/metrics"
@@ -30,6 +29,16 @@ func NewAppContext(config config.Provider) *AppContext {
 	}
 }
 
+// GetAppOption returns application options
+func (a *AppContext) GetAppOption() AppOption {
+	return AppOption{
+		Host:   a.config.GetString("APP_HOST"),
+		Port:   a.config.GetInt("APP_PORT"),
+		Name:   a.config.GetString("APP_NAME"),
+		Secret: a.config.GetString("APP_SECRET"),
+	}
+}
+
 // GetDBInstance getting gorp instance, param: dbType can be "mysql" or "postgre"
 func (a *AppContext) GetDBInstance(dbType string) (*gorp.DbMap, error) {
 	var gorp *gorp.DbMap
@@ -39,7 +48,7 @@ func (a *AppContext) GetDBInstance(dbType string) (*gorp.DbMap, error) {
 		dbOption := a.GetMysqlOption()
 		gorp, err = driver.NewMysqlDatabase(dbOption)
 	case DBDialectPostgres:
-		dbOption := a.getPostgreOption()
+		dbOption := a.GetPostgreOption()
 		gorp, err = driver.NewPostgreDatabase(dbOption)
 	default:
 		err = errors.New("Error get db instance, unknown db type")
@@ -77,11 +86,6 @@ func (a *AppContext) GetPostgreOption() driver.DBPostgreOption {
 	}
 }
 
-// GetCachePool returns redis connection pool
-func (a *AppContext) GetCachePool() *redis.Pool {
-	return driver.NewCache(a.GetCacheOption())
-}
-
 // GetCacheOption returns redis options
 func (a *AppContext) GetCacheOption() driver.CacheOption {
 	return driver.CacheOption{
@@ -104,8 +108,8 @@ func (a *AppContext) GetCacheOption() driver.CacheOption {
 // GetTelegrafOption return telegraf options
 func (a *AppContext) GetTelegrafOption() metrics.TelegrafOption {
 	return metrics.TelegrafOption{
-		Enabled: a.config.GetBool("TELEGRAF_ENABLE"),
-		Host:    a.config.GetString("TELEGRAF_HOST"),
-		Port     a.config.GetInt("TELEGRAF_PORT"),
+		IsEnabled: a.config.GetBool("TELEGRAF_ENABLE"),
+		Host:      a.config.GetString("TELEGRAF_HOST"),
+		Port:      a.config.GetInt("TELEGRAF_PORT"),
 	}
 }

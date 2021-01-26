@@ -14,21 +14,21 @@ type HealthCheckHandler struct {
 func (h HealthCheckHandler) HealthCheck(w http.ResponseWriter, r *http.Request) (data interface{}, pageToken *string, err error) {
 	ctx := r.Context()
 
-	if h.HandlerOption.Config.GetBool("MYSQL_IS_ENABLED") {
+	if h.AppCtx.GetMysqlOption().IsEnable {
 		err = h.Services.HealthCheck.HealthCheckDbMysql(ctx)
 		if err != nil {
 			return
 		}
 	}
 
-	if h.HandlerOption.Config.GetBool("POSTGRE_IS_ENABLED") {
+	if h.AppCtx.GetPostgreOption().IsEnable {
 		err = h.Services.HealthCheck.HealthCheckDbPostgres(ctx)
 		if err != nil {
 			return
 		}
 	}
 
-	if h.HandlerOption.Config.GetBool("CACHE_IS_ENABLED") {
+	if h.AppCtx.GetCacheOption().IsEnable {
 		err = h.Services.HealthCheck.HealthCheckDbCache(ctx)
 		if err != nil {
 			return

@@ -8,6 +8,7 @@ import (
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/appcontext"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/driver"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/metrics"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/repository"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/server"
@@ -50,7 +51,7 @@ func start() {
 	var err error
 
 	var dbMysql *gorp.DbMap
-	if cfg.GetBool("MYSQL_IS_ENABLED") {
+	if app.GetMysqlOption().IsEnable {
 		dbMysql, err = app.GetDBInstance(appcontext.DBDialectMysql)
 		if err != nil {
 			logrus.Fatalf("Failed to start, error connect to DB MySQL | %v", err)
@@ -59,7 +60,7 @@ func start() {
 	}
 
 	var dbPostgre *gorp.DbMap
-	if cfg.GetBool("POSTGRE_IS_ENABLED") {
+	if app.GetPostgreOption().IsEnable {
 		dbPostgre, err = app.GetDBInstance(appcontext.DBDialectPostgres)
 		if err != nil {
 			logrus.Fatalf("Failed to start, error connect to DB Postgre | %v", err)
@@ -68,8 +69,8 @@ func start() {
 	}
 
 	var cache *redis.Pool
-	if cfg.GetBool("CACHE_IS_ENABLED") {
-		cache = app.GetCachePool()
+	if app.GetCacheOption().IsEnable {
+		cache = driver.NewCache(app.GetCacheOption())
 		cacheConn, err := cache.Dial()
 		if err != nil {
 			logrus.Fatalf("Failed to start, error connect to DB Cache | %v", err)
@@ -78,12 +79,13 @@ func start() {
 		defer cacheConn.Close()
 	}
 
-	opt := commons.Options{
+	opt := commons.Options {
+		AppCtx:    app,
 		Config:    cfg,
 		DbMysql:   dbMysql,
 		DbPostgre: dbPostgre,
 		CachePool: cache,
-		Metric:    metrics.NewMetric(app.GetTelegrafOption()),
+		Metric:    metrics.NewMetric(app.GetTelegrafOption(), app.GetAppOption().Name),
 	}
 
 	repo := wiringRepository(repository.Option{
