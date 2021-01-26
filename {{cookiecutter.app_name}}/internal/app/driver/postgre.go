@@ -10,6 +10,7 @@ import (
 
 // DBPostgreOption options for postgre connection
 type DBPostgreOption struct {
+	IsEnable    bool
 	Host        string
 	Port        int
 	Username    string

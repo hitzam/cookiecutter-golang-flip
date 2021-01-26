@@ -8,6 +8,7 @@ import (
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/appcontext"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/metrics"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/repository"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/server"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/service"
@@ -82,6 +83,7 @@ func start() {
 		DbMysql:   dbMysql,
 		DbPostgre: dbPostgre,
 		CachePool: cache,
+		Metric:    metrics.NewMetric(app.GetTelegrafOption()),
 	}
 
 	repo := wiringRepository(repository.Option{

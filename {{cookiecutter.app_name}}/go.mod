@@ -3,6 +3,7 @@ module github.com/kitabisa/{{ cookiecutter.app_name }}
 go 1.13
 
 require (
+    github.com/DataDog/datadog-go v4.0.1+incompatible
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gobuffalo/packr v1.30.1 // indirect

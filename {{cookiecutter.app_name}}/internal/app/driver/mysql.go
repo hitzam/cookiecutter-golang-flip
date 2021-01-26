@@ -11,6 +11,7 @@ import (
 
 // DBMysqlOption options for mysql connection
 type DBMysqlOption struct {
+	IsEnable             bool
 	Host                 string
 	Port                 int
 	Username             string

@@ -6,6 +6,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/driver"
+	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/metrics"
 	"gopkg.in/gorp.v3"
 )
 
@@ -35,7 +36,7 @@ func (a *AppContext) GetDBInstance(dbType string) (*gorp.DbMap, error) {
 	var err error
 	switch dbType {
 	case DBDialectMysql:
-		dbOption := a.getMysqlOption()
+		dbOption := a.GetMysqlOption()
 		gorp, err = driver.NewMysqlDatabase(dbOption)
 	case DBDialectPostgres:
 		dbOption := a.getPostgreOption()
@@ -47,8 +48,10 @@ func (a *AppContext) GetDBInstance(dbType string) (*gorp.DbMap, error) {
 	return gorp, err
 }
 
-func (a *AppContext) getMysqlOption() driver.DBMysqlOption {
+// GetMysqlOption returns mysql options
+func (a *AppContext) GetMysqlOption() driver.DBMysqlOption {
 	return driver.DBMysqlOption{
+		IsEnable:             a.config.GetBool("MYSQL_IS_ENABLED"),
 		Host:                 a.config.GetString("MYSQL_HOST"),
 		Port:                 a.config.GetInt("MYSQL_PORT"),
 		Username:             a.config.GetString("MYSQL_USERNAME"),
@@ -61,8 +64,10 @@ func (a *AppContext) getMysqlOption() driver.DBMysqlOption {
 	}
 }
 
-func (a *AppContext) getPostgreOption() driver.DBPostgreOption {
+// GetPostgreOption returns postgresql option
+func (a *AppContext) GetPostgreOption() driver.DBPostgreOption {
 	return driver.DBPostgreOption{
+		IsEnable:    a.config.GetBool("MYSQL_IS_ENABLED"),
 		Host:        a.config.GetString("POSTGRE_HOST"),
 		Port:        a.config.GetInt("POSTGRE_PORT"),
 		Username:    a.config.GetString("POSTGRE_USERNAME"),
@@ -72,13 +77,15 @@ func (a *AppContext) getPostgreOption() driver.DBPostgreOption {
 	}
 }
 
-// GetCachePool get cache pool connection
+// GetCachePool returns redis connection pool
 func (a *AppContext) GetCachePool() *redis.Pool {
-	return driver.NewCache(a.getCacheOption())
+	return driver.NewCache(a.GetCacheOption())
 }
 
-func (a *AppContext) getCacheOption() driver.CacheOption {
+// GetCacheOption returns redis options
+func (a *AppContext) GetCacheOption() driver.CacheOption {
 	return driver.CacheOption{
+		IsEnable:           a.config.GetBool("CACHE_IS_ENABLED"),
 		Host:               a.config.GetString("CACHE_HOST"),
 		Port:               a.config.GetInt("CACHE_PORT"),
 		Namespace:          a.config.GetString("CACHE_NAMESPACE"),
@@ -91,5 +98,14 @@ func (a *AppContext) getCacheOption() driver.CacheOption {
 		MaxIdle:            a.config.GetInt("CACHE_MAX_IDLE_CONNECTION"),
 		MaxActive:          a.config.GetInt("CACHE_MAX_ACTIVE_CONNECTION"),
 		Wait:               a.config.GetBool("CACHE_IS_WAIT"),
+	}
+}
+
+// GetTelegrafOption return telegraf options
+func (a *AppContext) GetTelegrafOption() metrics.TelegrafOption {
+	return metrics.TelegrafOption{
+		Enabled: a.config.GetBool("TELEGRAF_ENABLE"),
+		Host:    a.config.GetString("TELEGRAF_HOST"),
+		Port     a.config.GetInt("TELEGRAF_PORT"),
 	}
 }

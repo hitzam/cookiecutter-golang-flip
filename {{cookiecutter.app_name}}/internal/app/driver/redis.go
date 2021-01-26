@@ -9,6 +9,7 @@ import (
 
 // CacheOption properties for cache DB
 type CacheOption struct {
+	IsEnable           bool
 	Host               string
 	Port               int
 	DialConnectTimeout time.Duration
