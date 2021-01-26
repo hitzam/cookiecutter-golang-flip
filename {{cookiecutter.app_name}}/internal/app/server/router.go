@@ -9,6 +9,7 @@ import (
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/handler"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/version"
 	phttp "github.com/kitabisa/perkakas/v2/http"
+
 	// pmiddleware "github.com/kitabisa/perkakas/v2/middleware"
 	pstructs "github.com/kitabisa/perkakas/v2/structs"
 )
@@ -39,7 +40,7 @@ func Router(opt handler.HandlerOption) *chi.Mux {
 	healthCheckHandler.Handler = phandler(healthCheckHandler.HealthCheck)
 
 	// Setup your routing here
-	r.Method(http.MethodGet, "/health_check", healthCheckHandler)
+	r.Method(http.MethodGet, "/health-check", healthCheckHandler)
 	return r
 }
 

@@ -92,7 +92,7 @@ func (a *AppContext) GetCacheOption() driver.CacheOption {
 		IsEnable:           a.config.GetBool("CACHE_IS_ENABLED"),
 		Host:               a.config.GetString("CACHE_HOST"),
 		Port:               a.config.GetInt("CACHE_PORT"),
-		Namespace:          a.config.GetString("CACHE_NAMESPACE"),
+		Namespace:          a.config.GetInt("CACHE_NAMESPACE"),
 		Password:           a.config.GetString("CACHE_PASSWORD"),
 		DialConnectTimeout: a.config.GetDuration("CACHE_DIAL_CONNECT_TIMEOUT"),
 		ReadTimeout:        a.config.GetDuration("CACHE_READ_TIMEOUT"),
@@ -101,7 +101,6 @@ func (a *AppContext) GetCacheOption() driver.CacheOption {
 		MaxConnLifetime:    a.config.GetDuration("CACHE_CONNECTION_MAX_LIFETIME"),
 		MaxIdle:            a.config.GetInt("CACHE_MAX_IDLE_CONNECTION"),
 		MaxActive:          a.config.GetInt("CACHE_MAX_ACTIVE_CONNECTION"),
-		Wait:               a.config.GetBool("CACHE_IS_WAIT"),
 	}
 }
 

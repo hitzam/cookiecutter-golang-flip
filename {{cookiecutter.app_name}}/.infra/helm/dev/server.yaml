@@ -17,7 +17,7 @@ server:
     injected: true
 
   readiness:
-    path: /health_check
+    path: /health-check
 
   resources:
     requests:

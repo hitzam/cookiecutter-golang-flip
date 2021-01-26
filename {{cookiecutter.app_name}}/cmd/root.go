@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gomodule/redigo/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/appcontext"
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
@@ -22,7 +22,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "{{ cookiecutter.app_name }}",
 	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains examples and usage of using your application.`,
+	Long:  `A longer description that spans multiple lines and likely contains examples and usage of using your application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		{% if cookiecutter.is_server == "y" -%}
 		start()
@@ -68,24 +68,19 @@ func start() {
 		}
 	}
 
-	var cache *redis.Pool
+	var cacheClient *redis.Client
 	if app.GetCacheOption().IsEnable {
-		cache = driver.NewCache(app.GetCacheOption())
-		cacheConn, err := cache.Dial()
-		if err != nil {
-			logrus.Fatalf("Failed to start, error connect to DB Cache | %v", err)
-			return
-		}
-		defer cacheConn.Close()
+		cacheClient = driver.NewCache(app.GetCacheOption())
+		defer cacheClient.Close()
 	}
 
-	opt := commons.Options {
-		AppCtx:    app,
-		Config:    cfg,
-		DbMysql:   dbMysql,
-		DbPostgre: dbPostgre,
-		CachePool: cache,
-		Metric:    metrics.NewMetric(app.GetTelegrafOption(), app.GetAppOption().Name),
+	opt := commons.Options{
+		AppCtx:      app,
+		CacheClient: cacheClient,
+		Config:      cfg,
+		DbMysql:     dbMysql,
+		DbPostgre:   dbPostgre,
+		Metric:      metrics.NewMetric(app.GetTelegrafOption(), app.GetAppOption().Name),
 	}
 
 	repo := wiringRepository(repository.Option{

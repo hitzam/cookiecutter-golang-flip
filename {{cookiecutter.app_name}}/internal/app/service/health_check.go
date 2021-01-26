@@ -44,10 +44,7 @@ func (h *healthCheck) HealthCheckDbPostgres(ctx context.Context) (err error) {
 }
 
 func (h *healthCheck) HealthCheckDbCache(ctx context.Context) (err error) {
-	cacheConn := h.opt.CachePool.Get()
-	defer cacheConn.Close()
-
-	_, err = cacheConn.Do("PING")
+	err = h.opt.CacheClient.Ping(ctx).Err()
 	if err != nil {
 		plog.Zlogger(ctx).Err(err).Send()
 		err = commons.ErrCacheConn
