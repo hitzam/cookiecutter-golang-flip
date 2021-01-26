@@ -22,3 +22,5 @@ require (
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	gopkg.in/gorp.v3 v3.0.2
 )
+
+replace gopkg.in/gorp.v3 => github.com/go-gorp/gorp/v3 v3.0.2
