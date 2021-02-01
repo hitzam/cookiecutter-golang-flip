@@ -71,7 +71,7 @@ jobs:
           make rollback RELEASE=${{ github.event.inputs.release }} REVISION=${{ github.event.inputs.revision }}
 
       - name: Remove unused Docker images
-        if: steps.helm-values.outputs.image-tag != 0 && steps.helm-revision.outputs.oldest != github.event.inputs.revision && contains(github.event.inputs.release, 'hello-server')
+        if: steps.helm-values.outputs.image-tag != 0 && steps.helm-revision.outputs.oldest != github.event.inputs.revision && contains(github.event.inputs.release, '{%- endraw -%}{{ cookiecutter.app_name }}-server{%- raw -%}')
         env:
           DOCKER_REPOSITORY: ${{ secrets.GCR_HOST }}/${{ secrets.GCP_PROJECT_ID_STG }}
           IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
