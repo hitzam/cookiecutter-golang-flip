@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
-
 	phttp "github.com/kitabisa/perkakas/v2/http"
 	"github.com/kitabisa/perkakas/v2/structs"
 )
@@ -17,7 +16,6 @@ var cfg = config.Config()
 func InjectErrors(handlerCtx *phttp.HttpHandlerContext) {
 	handlerCtx.AddError(ErrDBConn, ErrDBConnResp)
 	handlerCtx.AddError(ErrCacheConn, ErrCacheConnResp)
-	handlerCtx.AddError(ErrInfluxConn, ErrInfluxConnResp)
 	// etc...
 }
 
@@ -26,8 +24,8 @@ func getErrorResponce(errorCode string) structs.Response {
 	return structs.Response{
 		ResponseCode: errorCode,
 		ResponseDesc: structs.ResponseDesc{
-			ID: cfg.GetString(fmt.Sprintf("%s%s", "response_code.ID.", errorCode)),
-			EN: cfg.GetString(fmt.Sprintf("%s%s", "response_code.EN.", errorCode)),
+			ID: cfg.GetString(fmt.Sprintf("RESPONSE_CODE_ID_%s", errorCode)),
+			EN: cfg.GetString(fmt.Sprintf("RESPONSE_CODE_EN_%s", errorCode)),
 		},
 	}
 }
@@ -47,14 +45,5 @@ var ErrCacheConn = errors.New("ErrCacheConn")
 // ErrCacheConnResp ErrCacheConn's response
 var ErrCacheConnResp *structs.ErrorResponse = &structs.ErrorResponse{
 	Response:   getErrorResponce("101002"),
-	HttpStatus: http.StatusInternalServerError,
-}
-
-// ErrInfluxConn error type for Error Influx Connection
-var ErrInfluxConn = errors.New("ErrInfluxConn")
-
-// ErrInfluxConnResp ErrInfluxConn's response
-var ErrInfluxConnResp *structs.ErrorResponse = &structs.ErrorResponse{
-	Response:   getErrorResponce("101003"),
 	HttpStatus: http.StatusInternalServerError,
 }

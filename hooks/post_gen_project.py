@@ -55,53 +55,36 @@ def init_git():
         git = Popen(command, cwd=PROJECT_DIRECTORY)
         git.wait()
 
+# 1. Remove built-in rabbitmq if not selected
+if '{{ cookiecutter.use_rabbitmq }}'.lower() != 'y':
+    remove_file(".infra/helm/dev/rabbitmq-secret.yaml")
+    remove_file(".infra/helm/stg/rabbitmq-secret.yaml")
+    remove_file(".infra/helm/uat/rabbitmq-secret.yaml")
+    remove_file(".infra/helm/prod/rabbitmq-secret.yaml")
 
-# remove buroq related file/folders if not selected
-if '{{ cookiecutter.use_buroq }}'.lower() != 'y':
-    remove_dir("api")
-    remove_file("cmd/root_buroq.go")
-    remove_file("cmd/migration.go")
-    remove_file("config/config_buroq.go")
-    remove_file("go_buroq.mod")
-    remove_dir("internal")
-    remove_dir("migrations/seeds")
-    remove_dir("migrations/sql")
-    remove_dir("params")
-    remove_dir("pkg")
-
-if  '{{ cookiecutter.use_buroq }}'.lower() == 'y':
-    remove_file("cmd/root.go")
-    remove_file("cmd/config.go")
-    remove_file("go.mod")
-    remove_dir("log")
-
-    rename_file("cmd/root_buroq.go", "cmd/root.go")
-    rename_file("config/config_buroq.go", "config/config.go")
-    rename_file("go_buroq.mod", "go.mod")
-
-# 1. Remove viper config if not seleted
-if '{{ cookiecutter.use_viper_config }}'.lower() != 'y' and '{{ cookiecutter.use_buroq }}'.lower() != 'y':
-    remove_dir("config")
-
-# 2. Remove logrus utils if not seleted
-if '{{ cookiecutter.use_logrus_logging }}'.lower() != 'y':
-    remove_dir("log")
-
-# 3. Remove cobra utils if not seleted
-if '{{ cookiecutter.use_cobra_cmd }}'.lower() != 'y' and '{{ cookiecutter.use_buroq }}'.lower() != 'y':
-    remove_dir("cmd")
-
-# 4. Remove migrate utils if not selected
+# 2. Remove database migration if not selected
 if '{{ cookiecutter.use_migrate_migration }}'.lower() != 'y':
     remove_dir("migrations")
+    remove_file("cmd/migration.go")
+    remove_file(".infra/helm/dev/migration.yaml")
+    remove_file(".infra/helm/stg/migration.yaml")
+    remove_file(".infra/helm/uat/migration.yaml")
+    remove_file(".infra/helm/prod/migration.yaml")
 
-# 5. Remove uat values if not enabled
-if '{{ cookiecutter.enable_uat }}'.lower() != 'y':
-    remove_file("_infra/k8s/uat.yaml")
+# 3. Remove worker if not selected
+if '{{ cookiecutter.is_worker }}'.lower() != 'y':
+    remove_file("cmd/worker.go")
+    remove_file(".infra/helm/dev/worker.yaml")
+    remove_file(".infra/helm/stg/worker.yaml")
+    remove_file(".infra/helm/uat/worker.yaml")
+    remove_file(".infra/helm/prod/worker.yaml")
 
-# 6. Remove dev values if not enabled
-if '{{ cookiecutter.enable_dev }}'.lower() != 'y':
-    remove_file("_infra/k8s/dev.yaml")
+# 4. Remove server if not selected
+if '{{ cookiecutter.is_server }}'.lower() != 'y':
+    remove_file(".infra/helm/dev/server.yaml")
+    remove_file(".infra/helm/stg/server.yaml")
+    remove_file(".infra/helm/uat/server.yaml")
+    remove_file(".infra/helm/prod/server.yaml")
 
-# 7. Initialize Git (should be run after all file have been modified or deleted)
+# 5. Initialize Git (should be run after all file have been modified or deleted)
 init_git()

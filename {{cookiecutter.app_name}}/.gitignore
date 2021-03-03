@@ -5,9 +5,10 @@ bin/
 *.log
 *.tmp
 .DS_STORE
+.DS_Store
 
 # config file
-params/{{ cookiecutter.app_name }}.toml
+params/.env
 
 # executables & libs
 {{ cookiecutter.app_name }}
@@ -16,3 +17,6 @@ params/{{ cookiecutter.app_name }}.toml
 *.dll
 *.test
 *.dylib
+
+# decrypted secret file
+*.dec

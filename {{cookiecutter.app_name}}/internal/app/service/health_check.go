@@ -1,16 +1,17 @@
 package service
 
 import (
+	"context"
+
 	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
-	"github.com/kitabisa/perkakas/v2/log"
+	plog "github.com/kitabisa/perkakas/v2/log"
 )
 
 // IHealthCheck interface for health check service
 type IHealthCheck interface {
-	HealthCheckDbMysql() (err error)
-	HealthCheckDbPostgres() (err error)
-	HealthCheckDbCache() (err error)
-	HealthCheckInflux() (err error)
+	HealthCheckDbMysql(ctx context.Context) (err error)
+	HealthCheckDbPostgres(ctx context.Context) (err error)
+	HealthCheckDbCache(ctx context.Context) (err error)
 }
 
 type healthCheck struct {
@@ -24,43 +25,31 @@ func NewHealthCheck(opt Option) IHealthCheck {
 	}
 }
 
-func (h *healthCheck) HealthCheckDbMysql() (err error) {
+func (h *healthCheck) HealthCheckDbMysql(ctx context.Context) (err error) {
 	err = h.opt.DbMysql.Db.Ping()
 	if err != nil {
-		h.opt.Logger.AddMessage(log.FatalLevel, err.Error())
+		plog.Zlogger(ctx).Err(err).Send()
 		err = commons.ErrDBConn
 	}
 	return
 }
 
-func (h *healthCheck) HealthCheckDbPostgres() (err error) {
+func (h *healthCheck) HealthCheckDbPostgres(ctx context.Context) (err error) {
 	err = h.opt.DbPostgre.Db.Ping()
 	if err != nil {
-		h.opt.Logger.AddMessage(log.FatalLevel, err.Error())
+		plog.Zlogger(ctx).Err(err).Send()
 		err = commons.ErrDBConn
 	}
 	return
 }
 
-func (h *healthCheck) HealthCheckDbCache() (err error) {
-	cacheConn := h.opt.CachePool.Get()
-	_, err = cacheConn.Do("PING")
+func (h *healthCheck) HealthCheckDbCache(ctx context.Context) (err error) {
+	err = h.opt.CacheClient.Ping(ctx).Err()
 	if err != nil {
-		h.opt.Logger.AddMessage(log.FatalLevel, err.Error())
+		plog.Zlogger(ctx).Err(err).Send()
 		err = commons.ErrCacheConn
 		return
 	}
-	defer cacheConn.Close()
 
 	return nil
-}
-
-func (h *healthCheck) HealthCheckInflux() (err error) {
-	err = h.opt.Influx.Ping()
-	if err != nil {
-		h.opt.Logger.AddMessage(log.FatalLevel, err.Error())
-		err = commons.ErrInfluxConn
-	}
-
-	return
 }

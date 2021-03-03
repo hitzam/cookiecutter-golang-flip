@@ -5,32 +5,8 @@ Powered by [Cookiecutter](https://github.com/audreyr/cookiecutter), Cookiecutter
 ## Features
 
 - Generous `Makefile` with management commands.
-- Uses `go module`.
+- Uses `go modules`.
 - injects build time and git hash at build time.
-
-## Optional Integrations
-
-- Can use [viper](https://github.com/spf13/viper) for env var config.
-- Can use [cobra](https://github.com/spf13/cobra) for cli tools.
-- Can use [logrus](https://github.com/sirupsen/logrus) for logging.
-- Can create dockerfile for building go binary and dockerfile for final go binary (no code in final container).
-- If docker is used adds docker management commands to makefile.
-- Option of TravisCI, CircleCI or None.
-
-## Constraints
-
-- Uses `go module` for dependency management.
-- Only maintained 3rd party libraries are used.
-
-This project now uses docker multistage builds, you need at least docker version v17.05.0-ce to use the docker file in this template, [you can read more about multistage builds here](https://www.critiqus.com/post/multi-stage-docker-builds/).
-
-## Docker
-
-This template uses docker multistage builds to make images slimmer and containers only the final project binary and assets with no source code whatsoever.
-
-You can find the image dokcer file in this [repo](https://github.com/lacion/alpine-golang-buildimage) and more information about docker multistage builds in this [blog post](https://www.critiqus.com/post/multi-stage-docker-builds/).
-
-Apps run under non root user and also with [dumb-init](https://github.com/Yelp/dumb-init).
 
 ## Usage
 
@@ -65,24 +41,17 @@ Select squad:
 2 - infra
 3 - frontend
 Choose from 1, 2, 3 (1, 2, 3) [1]: 1
-use_buroq [y]: y
-use_logrus_logging [y]: y
-use_viper_config [y]: y
-use_cobra_cmd [y]: y
 use_migrate_migration [n]: n
+use_rabbitmq [n]: n
+is_worker [n]: n
 is_server [y]: y
 Select connectivity:
 1 - public
 2 - private
 Choose from 1, 2 (1, 2) [1]: 1
-is_worker [n]: n
 enable_uat [n]: n
 enable_dev [n]: n
 ```
-
-nb:
-- if **y** on `use_buroq`, then all values for `use_logrus_logging, use_viper_config, use_cobra_cmd` will be **ignored**.
-- migrate function will there if `use_buroq` is **y** and `use_migrate_migration` is **not y**, but there won't be any deployment for it.
 
 Enter the project and take a look around:
 ```console
@@ -96,7 +65,3 @@ $ make help
 $ make build
 $ ./bin/golang-services
 ```
-
-## Projects build with cookiecutter-golang
-
-- [iothub](https://github.com/lacion/iothub) websocket multiroom server for IoT

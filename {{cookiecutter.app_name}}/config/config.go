@@ -1,13 +1,16 @@
 package config
 
 import (
+	"fmt"
+	"os"
+	"strings"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
 
-// Provider defines a set of read-only methods for accessing the application
-// configuration params as defined in one of the config files.
+// Provider the config provider
 type Provider interface {
 	ConfigFileUsed() string
 	Get(key string) interface{}
@@ -29,30 +32,28 @@ type Provider interface {
 
 var defaultConfig *viper.Viper
 
+func init() {
+	defaultConfig = readViperConfig()
+}
+
+func readViperConfig() *viper.Viper {
+	// handle config path for unit test
+	dirPath, err := os.Getwd()
+	if err != nil {
+		panic(fmt.Errorf("Error get working dir: %s", err))
+	}
+	dirPaths := strings.Split(dirPath, "/internal")
+
+	godotenv.Load(fmt.Sprintf("%s/params/.env", dirPaths[0]))
+	godotenv.Load("./params/.env")
+
+	v := viper.New()
+	v.AllowEmptyEnv(true)
+	v.AutomaticEnv()
+	return v
+}
+
+// Config return provider so that you can read config anywhere
 func Config() Provider {
 	return defaultConfig
-}
-
-func LoadConfigProvider(appName string) Provider {
-	return readViperConfig(appName)
-}
-
-func init() {
-	defaultConfig = readViperConfig("{{ cookiecutter.app_name | upper }}")
-}
-
-func readViperConfig(appName string) *viper.Viper {
-	v := viper.New()
-	v.AddConfigPath("./params")
-	v.AddConfigPath("/opt/{{ cookiecutter.app_name }}/bin/params")
-	v.SetEnvPrefix(appName)
-	v.AutomaticEnv()
-
-	// global defaults
-	{% if cookiecutter.use_logrus_logging == "y" %}
-	v.SetDefault("json_logs", false)
-	v.SetDefault("loglevel", "debug")
-	{% endif %}
-
-	return v
 }

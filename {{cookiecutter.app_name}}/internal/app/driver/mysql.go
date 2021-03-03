@@ -6,11 +6,12 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql" // defines mysql driver used
-	"gopkg.in/gorp.v2"
+	"gopkg.in/gorp.v3"
 )
 
 // DBMysqlOption options for mysql connection
 type DBMysqlOption struct {
+	IsEnable             bool
 	Host                 string
 	Port                 int
 	Username             string
