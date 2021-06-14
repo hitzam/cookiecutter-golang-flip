@@ -16,6 +16,7 @@ def context():
     return {
         'app_name': 'MyTestProject',
         'squad': 'infra',
+        'business_unit': 'platform',
         'use_migrate_migration': 'y',
         'use_rabbitmq': 'n',
         'is_server': 'y',

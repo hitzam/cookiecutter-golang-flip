@@ -4,6 +4,7 @@ meta:
   env: {{ requiredEnv "ENV" }}
   version: {{ requiredEnv "VERSION" | quote }}
   squad: {{ requiredEnv "SQUAD" }}
+  business: {{ requiredEnv "BUSINESS" }}
 
 image:
   repository: {{ requiredEnv "DOCKER_REPOSITORY" }}/{{ requiredEnv "APP_NAME" }}

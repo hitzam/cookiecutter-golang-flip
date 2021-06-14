@@ -1,6 +1,7 @@
 {
     "app_name": "golangproject",
     "squad": ["backend", "infra", "frontend"],
+    "business_unit": "platform",
     "use_migrate_migration": "n",
     "use_rabbitmq": "n",
     "is_worker": "n",

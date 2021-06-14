@@ -41,6 +41,7 @@ Select squad:
 2 - infra
 3 - frontend
 Choose from 1, 2, 3 (1, 2, 3) [1]: 1
+business_unit [platform]: platform
 use_migrate_migration [n]: n
 use_rabbitmq [n]: n
 is_worker [n]: n

@@ -5,6 +5,7 @@ GIT_COMMIT    = $(shell git rev-parse HEAD)
 GIT_DIRTY     = $(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 BUILD_DATE    = $(shell date '+%Y-%m-%d-%H:%M:%S')
 SQUAD         = "{{ cookiecutter.squad }}"
+BUSINESS      = "{{ cookiecutter.business_unit }}"
 
 .PHONY: default
 default: help
@@ -47,6 +48,7 @@ deploy:
 	export APP_NAME=${APP_NAME} && \
 	export VERSION=${VERSION} && \
 	export SQUAD=${SQUAD} && \
+	export BUSINESS=${BUSINESS} && \
 	helmfile apply
 
 .PHONY: helm-history-length

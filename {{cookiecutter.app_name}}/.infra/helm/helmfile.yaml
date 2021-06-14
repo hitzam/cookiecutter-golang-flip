@@ -18,7 +18,7 @@ releases:
       tier: data
       type: dependency
     chart: bitnami/rabbitmq
-    version: 8.6.1
+    version: 8.11.0
     secrets:
       - {{ requiredEnv "ENV" }}/rabbitmq-secret.yaml
 
@@ -31,7 +31,7 @@ releases:
       tier: data
       type: dependency
     chart: bitnami/redis
-    version: 12.2.4
+    version: 12.7.7
     values:
       - {{ requiredEnv "ENV" }}/redis.yaml
 
@@ -41,7 +41,7 @@ releases:
       tier: config
       type: main
     chart: kitabisa/config
-    version: ~0.2.0
+    version: ~0.4.0
     values:
       - {{ requiredEnv "ENV" }}/config.yaml
       - values.yaml.gotmpl
@@ -57,7 +57,7 @@ releases:
       tier: migration
       type: main
     chart: kitabisa/migration
-    version: ~0.3.0-alpha
+    version: ~0.4.0-alpha
     values:
       - {{ requiredEnv "ENV" }}/migration.yaml
       - values.yaml.gotmpl
@@ -80,7 +80,7 @@ releases:
       tier: app
       type: main
     chart: kitabisa/app
-    version: ~0.14.0-alpha
+    version: ~0.17.0-alpha
     values:
       - {{ requiredEnv "ENV" }}/server.yaml
       - values.yaml.gotmpl
@@ -111,7 +111,7 @@ releases:
       tier: app
       type: main
     chart: kitabisa/app
-    version: ~0.14.0-alpha
+    version: ~0.17.0-alpha
     values:
       - {{ requiredEnv "ENV" }}/worker.yaml
       - values.yaml.gotmpl
@@ -136,7 +136,7 @@ releases:
       tier: user
       type: main
     chart: kitabisa/user
-    version: ~0.2.0
+    version: ~0.3.0
     values:
       - {{ requiredEnv "ENV" }}/user.yaml
       - values.yaml.gotmpl
