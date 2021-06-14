@@ -107,3 +107,11 @@ coverage:
 clean:
 	@echo "Removing ${APP_NAME} ${VERSION}"
 	@test ! -e bin/${APP_NAME} || rm bin/${APP_NAME}
+
+.PHONY: get-app-name
+get-app-name:
+	@echo ${APP_NAME}
+
+.PHONY: get-business-unit
+get-business-unit:
+	@echo ${BUSINESS}

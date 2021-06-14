@@ -127,4 +127,21 @@ jobs:
           IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
         run: |-
           make prune || true
+
+      # configure namespace location on rancher project
+      - name: Get business unit & app name values
+        id: app-meta
+        run: |-
+          echo "::set-output name=app-name::$(make get-app-name)"
+          echo "::set-output name=business-unit::$(make get-business-unit)"
+
+      - name: Configure namespace-project mapping in rancher
+        uses: kitabisa/actions/rancher-ns-mover@master
+        with:
+          rancher-host: ${{ secrets.RANCHER_CATTLE_HOST }}
+          rancher-access-key: ${{ secrets.RANCHER_CATTLE_ACCESS_KEY }}
+          rancher-secret-key: ${{ secrets.RANCHER_CATTLE_SECRET_KEY }}
+          cluster-id: ${{ secrets.RANCHER_CATTLE_CLUSTER_ID_STGDEV }}
+          project-name: ${{ steps.app-meta.outputs.business-unit }}
+          namespace: ${{ steps.app-meta.outputs.app-name }}
 {%- endraw %}
