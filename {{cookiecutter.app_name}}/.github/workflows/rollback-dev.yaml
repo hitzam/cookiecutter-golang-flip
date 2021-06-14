@@ -28,16 +28,16 @@ jobs:
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@master
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID_DEV }}
-          service_account_key: ${{ secrets.GCP_SA_KEY_DEV }}
+          project_id: ${{ secrets.GCP_PROJECT_ID_STG }}
+          service_account_key: ${{ secrets.GCP_SA_KEY_STG }}
           export_default_credentials: true
 
       - name: Get GKE credential
         uses: google-github-actions/get-gke-credentials@main
         with:
-          cluster_name: ${{ secrets.GKE_CLUSTER_DEV }}
-          location: ${{ secrets.GKE_ZONE_DEV }}
-          project_id: ${{ secrets.GCP_PROJECT_ID_DEV }}
+          cluster_name: ${{ secrets.GKE_CLUSTER_STGDEV }}
+          location: ${{ secrets.GKE_ZONE_STGDEV }}
+          project_id: ${{ secrets.GCP_PROJECT_ID_STG }}
 
       - name: Setup Helm
         uses: azure/setup-helm@v1
@@ -67,13 +67,16 @@ jobs:
           echo "::set-output name=image-tag::$(make helm-image-tag)"
 
       - name: Rollback via Helm
+        env:
+          RELEASE: ${{ github.event.inputs.release }}
+          REVISION: ${{ github.event.inputs.revision }}
         run: |-
-          make rollback RELEASE=${{ github.event.inputs.release }} REVISION=${{ github.event.inputs.revision }}
+          make rollback
 
       - name: Remove unused Docker images
         if: steps.helm-values.outputs.image-tag != 0 && steps.helm-revision.outputs.oldest != github.event.inputs.revision && contains(github.event.inputs.release, '{%- endraw -%}{{ cookiecutter.app_name }}-server{%- raw -%}')
         env:
-          DOCKER_REPOSITORY: ${{ secrets.GCR_HOST }}/${{ secrets.GCP_PROJECT_ID_DEV }}
+          DOCKER_REPOSITORY: ${{ secrets.GCR_HOST }}/${{ secrets.GCP_PROJECT_ID_STG }}
           IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
         run: |-
           make prune || true

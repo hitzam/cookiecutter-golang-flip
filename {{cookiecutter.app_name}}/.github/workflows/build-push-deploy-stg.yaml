@@ -51,8 +51,8 @@ jobs:
       - name: Get GKE credential
         uses: google-github-actions/get-gke-credentials@main
         with:
-          cluster_name: ${{ secrets.GKE_CLUSTER_STG }}
-          location: ${{ secrets.GKE_ZONE_STG }}
+          cluster_name: ${{ secrets.GKE_CLUSTER_STGDEV }}
+          location: ${{ secrets.GKE_ZONE_STGDEV }}
           project_id: ${{ secrets.GCP_PROJECT_ID_STG }}
 
       - name: Setup Helm
