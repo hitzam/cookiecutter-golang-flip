@@ -1,7 +1,7 @@
 {
     "app_name": "golangproject",
     "squad": ["backend", "infra", "frontend"],
-    "business_unit": "platform",
+    "business_unit": ["platform", "campaign-management", "saling-jaga", "engineering", "donation-product", "3pp", "campaigner"],
     "use_migrate_migration": "n",
     "use_rabbitmq": "n",
     "is_worker": "n",
