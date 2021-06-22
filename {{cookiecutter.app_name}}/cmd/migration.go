@@ -85,7 +85,7 @@ func doMigrate(appCtx *appcontext.AppContext, mSource migrate.FileMigrationSourc
 	return nil
 }
 
-func createMigrationFile(logger *log.Logger, mDir string, mName string) error {
+func createMigrationFile(mDir string, mName string) error {
 	var migrationContent = `-- +migrate Up
 -- SQL in section 'Up' is executed when this migration is applied
 -- [your SQL script here]
