@@ -76,13 +76,15 @@ func (a *AppContext) GetMysqlOption() driver.DBMysqlOption {
 // GetPostgreOption returns postgresql option
 func (a *AppContext) GetPostgreOption() driver.DBPostgreOption {
 	return driver.DBPostgreOption{
-		IsEnable:    a.config.GetBool("MYSQL_IS_ENABLED"),
-		Host:        a.config.GetString("POSTGRE_HOST"),
-		Port:        a.config.GetInt("POSTGRE_PORT"),
-		Username:    a.config.GetString("POSTGRE_USERNAME"),
-		Password:    a.config.GetString("POSTGRE_PASSWORD"),
-		DBName:      a.config.GetString("POSTGRE_DB_NAME"),
-		MaxPoolSize: a.config.GetInt("POSTGRE_POOL_SIZE"),
+		IsEnable:    	 a.config.GetBool("POSTGRE_IS_ENABLED"),
+		Host:        	 a.config.GetString("POSTGRE_HOST"),
+		Port:        	 a.config.GetInt("POSTGRE_PORT"),
+		Username:    	 a.config.GetString("POSTGRE_USERNAME"),
+		Password:    	 a.config.GetString("POSTGRE_PASSWORD"),
+		DBName:      	 a.config.GetString("POSTGRE_DB_NAME"),
+		MaxOpenConn: 	 a.config.GetInt("POSTGRE_MAX_OPEN_CONN"),
+		MaxIdleConn: 	 a.config.GetInt("POSTGRE_MAX_IDLE_CONN"),
+		ConnMaxLifetime: a.config.GetDuration("POSTGRE_CONN_MAX_LIFETIME"),
 	}
 }
 
