@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/jinzhu/gorm v1.9.11
     github.com/joho/godotenv v1.3.0
-	github.com/kitabisa/perkakas/v2 v2.20.0
+	github.com/kitabisa/perkakas/v2 v2.24.0
 	github.com/lib/pq v1.2.0
 	github.com/prometheus/client_golang v0.9.3
 	github.com/rubenv/sql-migrate v0.0.0-20191025130928-9355dd04f4b3
@@ -20,6 +20,7 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.4.0
 	github.com/ziutek/mymysql v1.5.4 // indirect
+	gopkg.in/gorp.v1 v1.7.2 // indirect
 	gopkg.in/gorp.v3 v3.0.2
 )
 
