@@ -56,7 +56,7 @@ jobs:
         uses: azure/setup-helm@v1
 
       - name: Setup Helmfile
-        uses: kitabisa/actions/setup-helmfile@master
+        uses: flip-id/actions/setup-helmfile@master
 
       - name: Setup yq
         uses: chrisdickinson/setup-yq@latest
@@ -133,7 +133,7 @@ jobs:
           echo "::set-output name=business-unit::$(make get-business-unit)"
 
       - name: Configure namespace-project mapping in rancher
-        uses: kitabisa/actions/rancher-ns-mover@master
+        uses: flip-id/actions/rancher-ns-mover@master
         with:
           rancher-host: ${{ secrets.RANCHER_CATTLE_HOST }}
           rancher-access-key: ${{ secrets.RANCHER_CATTLE_ACCESS_KEY }}

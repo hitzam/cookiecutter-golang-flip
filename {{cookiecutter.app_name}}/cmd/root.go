@@ -5,17 +5,17 @@ import (
 	"os"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/appcontext"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/driver"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/metrics"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/repository"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/server"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/service"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/config"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/appcontext"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/driver"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/metrics"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/repository"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/server"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/service"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"gopkg.in/gorp.v3"
+	"gorm.io/gorm"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -50,7 +50,7 @@ func start() {
 	app := appcontext.NewAppContext(cfg)
 	var err error
 
-	var dbMysql *gorp.DbMap
+	var dbMysql *gorm.DB
 	if app.GetMysqlOption().IsEnable {
 		dbMysql, err = app.GetDBInstance(appcontext.DBDialectMysql)
 		if err != nil {
@@ -59,7 +59,7 @@ func start() {
 		}
 	}
 
-	var dbPostgre *gorp.DbMap
+	var dbPostgre *gorm.DB
 	if app.GetPostgreOption().IsEnable {
 		dbPostgre, err = app.GetDBInstance(appcontext.DBDialectPostgres)
 		if err != nil {

@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/repository"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/repository"
 )
 
 // Option anything any service object needed

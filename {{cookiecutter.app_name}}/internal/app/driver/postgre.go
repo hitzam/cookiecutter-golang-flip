@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	_ "github.com/lib/pq" // defines postgreSQL driver used
-	"gopkg.in/gorp.v3"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 // DBPostgreOption options for postgre connection
@@ -17,13 +17,13 @@ type DBPostgreOption struct {
 	Username        string
 	Password        string
 	DBName          string
-	MaxOpenConn     int
-	MaxIdleConn     int
+	MaxOpenConns    int
+	MaxIdleConns     int
 	ConnMaxLifetime time.Duration
 }
 
-// NewPostgreDatabase return gorp dbmap object with postgre options param
-func NewPostgreDatabase(option DBPostgreOption) (*gorp.DbMap, error) {
+// NewPostgreDatabase return gorm dbmap object with postgre options param
+func NewPostgreDatabase(option DBPostgreOption) (*gorm.DB, error) {
 	db, err := sql.Open("postgres", fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable", option.Host, option.Port, option.Username, option.DBName, option.Password))
 	if err != nil {
 		return nil, err
@@ -34,9 +34,14 @@ func NewPostgreDatabase(option DBPostgreOption) (*gorp.DbMap, error) {
 		return nil, err
 	}
 
-	db.SetMaxOpenConns(option.MaxOpenConn)
+	db.SetMaxOpenConns(option.MaxOpenConns)
+	db.SetMaxIdleConns(option.MaxIdleConns)
 	db.SetConnMaxLifetime(option.ConnMaxLifetime)
-	db.SetMaxIdleConns(option.MaxIdleConn)
-	gorp := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
-	return gorp, nil
+
+	gorm, err := gorm.Open(postgres.New(postgres.Config{
+		Conn: db,
+	}), &gorm.Config{})
+
+
+	return gorm, nil
 }

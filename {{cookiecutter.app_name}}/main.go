@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/cmd"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/cmd"
 	zlog "github.com/rs/zerolog/log"
 )
 

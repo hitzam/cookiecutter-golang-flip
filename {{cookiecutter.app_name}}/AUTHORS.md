@@ -2,7 +2,7 @@
 
 ## Developer
 
--  [kitabisa](https://github.com/kitabisa)
+-  [flip-id](https://github.com/flip-id)
 
 ## Contributors
 

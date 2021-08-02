@@ -58,7 +58,7 @@ jobs:
         uses: azure/setup-helm@v1
 
       - name: Setup Helmfile
-        uses: kitabisa/actions/setup-helmfile@master
+        uses: flip-id/actions/setup-helmfile@master
 
       - name: Setup yq
         uses: chrisdickinson/setup-yq@latest

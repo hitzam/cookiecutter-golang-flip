@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
 	plog "github.com/kitabisa/perkakas/v2/log"
 )
 
@@ -26,7 +26,8 @@ func NewHealthCheck(opt Option) IHealthCheck {
 }
 
 func (h *healthCheck) HealthCheckDbMysql(ctx context.Context) (err error) {
-	err = h.opt.DbMysql.Db.Ping()
+	sqlDB, _ := h.opt.DbMysql.DB()
+	err = sqlDB.Ping()
 	if err != nil {
 		plog.Zlogger(ctx).Err(err).Send()
 		err = commons.ErrDBConn
@@ -35,7 +36,8 @@ func (h *healthCheck) HealthCheckDbMysql(ctx context.Context) (err error) {
 }
 
 func (h *healthCheck) HealthCheckDbPostgres(ctx context.Context) (err error) {
-	err = h.opt.DbPostgre.Db.Ping()
+	sqlDB, _ := h.opt.DbPostgre.DB()
+	err = sqlDB.Ping()
 	if err != nil {
 		plog.Zlogger(ctx).Err(err).Send()
 		err = commons.ErrDBConn

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/config"
 	phttp "github.com/kitabisa/perkakas/v2/http"
 	"github.com/kitabisa/perkakas/v2/structs"
 )

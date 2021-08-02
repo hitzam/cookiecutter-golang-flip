@@ -1,9 +1,8 @@
 {
     "app_name": "golangproject",
-    "squad": ["backend", "infra", "frontend"],
-    "business_unit": ["platform", "campaign-management", "saling-jaga", "engineering", "donation-product", "3pp", "campaigner"],
+    "group": ["consumer", "business", "platform"],
+    "pod": ["consumer-app", "growth-analytics", "payment-transfer", "financial", "digital", "disbursement", "pay-with-flip", "identity", "payment-platform", "operation", "data", "system"],
     "use_migrate_migration": "n",
-    "use_rabbitmq": "n",
     "is_worker": "n",
     "is_server": "y",
     "connectivity": ["public", "private"]

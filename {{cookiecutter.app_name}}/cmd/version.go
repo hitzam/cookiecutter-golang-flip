@@ -4,7 +4,7 @@ import (
 	"fmt"
 
    	"github.com/spf13/cobra"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/version"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/version"
 )
 
 // versionCmd represents the version command

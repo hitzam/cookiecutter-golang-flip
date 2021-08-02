@@ -12,7 +12,7 @@
 
 ## How to contribute
 
-Read [CONTRIBUTING.md](https://github.com/kitabisa/{{ cookiecutter.app_name }}/blob/main/CONTRIBUTING.md) to know more about how to contribute to this repo and how to deploy service. If you are new, it is mandatory to read this file first.
+Read [CONTRIBUTING.md](https://github.com/flip-id/{{ cookiecutter.app_name }}/blob/main/CONTRIBUTING.md) to know more about how to contribute to this repo and how to deploy service. If you are new, it is mandatory to read this file first.
 
 ## Requirement
 
@@ -24,7 +24,7 @@ Read [CONTRIBUTING.md](https://github.com/kitabisa/{{ cookiecutter.app_name }}/b
 
 1. Clone this repostory to your local.
    ```bash
-   $ git clone git@github.com:kitabisa/{{ cookiecutter.app_name }}.git
+   $ git clone git@github.com:flip-id/{{ cookiecutter.app_name }}.git
    ```
 
 2. Change working directory to `{{ cookiecutter.app_name }}` folder.
@@ -107,4 +107,4 @@ env:
 
 ## Need more help
 
-If you need more help or anything else, please ask Kitabisa backend engineer team. We would be happy to help you.
+If you need more help or anything else, please ask flip-id backend engineer team. We would be happy to help you.

@@ -18,7 +18,6 @@ def context():
         'squad': 'infra',
         'business_unit': 'platform',
         'use_migrate_migration': 'y',
-        'use_rabbitmq': 'n',
         'is_server': 'y',
         'is_worker': 'y',
         'connectivity': 'public',
@@ -58,13 +57,6 @@ def test_default_configuration(cookies, context):
     paths = build_files_list(str(result.project))
     assert paths
     check_paths(paths)
-
-
-@pytest.fixture(params=['use_rabbitmq'])
-def feature_context(request, context):
-    context.update({request.param: 'n'})
-    return context
-
 
 def test_disable_features(cookies, feature_context):
     result = cookies.bake(extra_context=feature_context)

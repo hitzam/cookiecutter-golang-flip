@@ -4,8 +4,8 @@ VERSION       = $(shell git describe --always --tags)
 GIT_COMMIT    = $(shell git rev-parse HEAD)
 GIT_DIRTY     = $(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 BUILD_DATE    = $(shell date '+%Y-%m-%d-%H:%M:%S')
-SQUAD         = "{{ cookiecutter.squad }}"
-BUSINESS      = "{{ cookiecutter.business_unit }}"
+POD           = "{{ cookiecutter.pod }}"
+GROUP         = "{{ cookiecutter.group }}"
 
 .PHONY: default
 default: help
@@ -28,7 +28,7 @@ help:
 .PHONY: build
 build:
 	@echo "Building ${APP_NAME} ${VERSION}"
-	go build -ldflags "-w -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Version=${VERSION} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.Environment=${ENV} -X github.com/kitabisa/{{ cookiecutter.app_name }}/version.BuildDate=${BUILD_DATE}" -o bin/${APP_NAME}
+	go build -ldflags "-w -X github.com/flip-id/{{ cookiecutter.app_name }}/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/flip-id/{{ cookiecutter.app_name }}/version.Version=${VERSION} -X github.com/flip-id/{{ cookiecutter.app_name }}/version.Environment=${ENV} -X github.com/flip-id/{{ cookiecutter.app_name }}/version.BuildDate=${BUILD_DATE}" -o bin/${APP_NAME}
 
 .PHONY: package
 package:
@@ -47,8 +47,8 @@ deploy:
 	@echo "Deploying ${APP_NAME} ${VERSION}"
 	export APP_NAME=${APP_NAME} && \
 	export VERSION=${VERSION} && \
-	export SQUAD=${SQUAD} && \
-	export BUSINESS=${BUSINESS} && \
+	export POD=${POD} && \
+	export GROUP=${GROUP} && \
 	helmfile apply
 
 .PHONY: helm-history-length

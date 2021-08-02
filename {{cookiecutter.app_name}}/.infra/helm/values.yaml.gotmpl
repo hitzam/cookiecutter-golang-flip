@@ -3,8 +3,8 @@ meta:
   name: {{ requiredEnv "APP_NAME" }}
   env: {{ requiredEnv "ENV" }}
   version: {{ requiredEnv "VERSION" | quote }}
-  squad: {{ requiredEnv "SQUAD" }}
-  business: {{ requiredEnv "BUSINESS" }}
+  pod: {{ requiredEnv "POD" }}
+  group: {{ requiredEnv "GROUP" }}
 
 image:
   repository: {{ requiredEnv "DOCKER_REPOSITORY" }}/{{ requiredEnv "APP_NAME" }}

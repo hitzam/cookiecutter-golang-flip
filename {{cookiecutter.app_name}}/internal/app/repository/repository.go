@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
+import "github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
 
 // Option anything any repo object needed
 type Option struct {

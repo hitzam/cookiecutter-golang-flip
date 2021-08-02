@@ -26,24 +26,23 @@ $ brew install cookiecutter
 
 Finally, to run it based on this template, type:
 ```console
-$ cookiecutter https://github.com/kitabisa/cookiecutter-golang.git
+$ cookiecutter https://github.com/flip-id/cookiecutter-golang.git
 ```
 
 You will be asked about your basic info (name, project name, app name, etc.). This info will be used to customize your new project.
 
-Warning: After this point, change 'Kitabisa', 'golang-services', etc to your own information.
+Warning: After this point, change 'flip-id', 'golang-services', etc to your own information.
 
 Answer the prompts with your own desired options. For example:
 ```console
 app_name [golangproject]: golang-services
-Select squad:
+Select group:
 1 - backend
 2 - infra
 3 - frontend
 Choose from 1, 2, 3 (1, 2, 3) [1]: 1
-business_unit [platform]: platform
+pod [consumer-app]: consumer-app
 use_migrate_migration [n]: n
-use_rabbitmq [n]: n
 is_worker [n]: n
 is_server [y]: y
 Select connectivity:

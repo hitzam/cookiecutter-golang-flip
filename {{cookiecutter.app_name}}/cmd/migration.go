@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/appcontext"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/config"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/appcontext"
 	migrate "github.com/rubenv/sql-migrate"
 	plog "github.com/kitabisa/perkakas/v2/log"
 	"github.com/spf13/cobra"
@@ -74,9 +74,11 @@ func doMigrate(appCtx *appcontext.AppContext, mSource migrate.FileMigrationSourc
 		return err
 	}
 
-	defer db.Db.Close()
+	sqlDB, _ := db.DB()
 
-	total, err := migrate.Exec(db.Db, dbDialect, mSource, direction)
+	defer sqlDB.Close()
+
+	total, err := migrate.Exec(sqlDB, dbDialect, mSource, direction)
 	if err != nil {
 		plog.Zlogger(context.Background()).Err(err).Msg("Fail migration")
 		return err

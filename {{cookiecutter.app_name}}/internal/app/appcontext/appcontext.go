@@ -3,10 +3,10 @@ package appcontext
 import (
 	"errors"
 
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/config"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/driver"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/metrics"
-	"gopkg.in/gorp.v3"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/config"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/driver"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/metrics"
+	"gorm.io/gorm"
 )
 
 const (
@@ -39,22 +39,22 @@ func (a *AppContext) GetAppOption() AppOption {
 	}
 }
 
-// GetDBInstance getting gorp instance, param: dbType can be "mysql" or "postgre"
-func (a *AppContext) GetDBInstance(dbType string) (*gorp.DbMap, error) {
-	var gorp *gorp.DbMap
+// GetDBInstance getting gorm instance, param: dbType can be "mysql" or "postgre"
+func (a *AppContext) GetDBInstance(dbType string) (*gorm.DB, error) {
+	var gorm *gorm.DB
 	var err error
 	switch dbType {
 	case DBDialectMysql:
 		dbOption := a.GetMysqlOption()
-		gorp, err = driver.NewMysqlDatabase(dbOption)
+		gorm, err = driver.NewMysqlDatabase(dbOption)
 	case DBDialectPostgres:
 		dbOption := a.GetPostgreOption()
-		gorp, err = driver.NewPostgreDatabase(dbOption)
+		gorm, err = driver.NewPostgreDatabase(dbOption)
 	default:
 		err = errors.New("Error get db instance, unknown db type")
 	}
 
-	return gorp, err
+	return gorm, err
 }
 
 // GetMysqlOption returns mysql options
@@ -82,8 +82,8 @@ func (a *AppContext) GetPostgreOption() driver.DBPostgreOption {
 		Username:    	 a.config.GetString("POSTGRE_USERNAME"),
 		Password:    	 a.config.GetString("POSTGRE_PASSWORD"),
 		DBName:      	 a.config.GetString("POSTGRE_DB_NAME"),
-		MaxOpenConn: 	 a.config.GetInt("POSTGRE_MAX_OPEN_CONN"),
-		MaxIdleConn: 	 a.config.GetInt("POSTGRE_MAX_IDLE_CONN"),
+		MaxOpenConns: 	 a.config.GetInt("POSTGRE_MAX_OPEN_CONN"),
+		MaxIdleConns: 	 a.config.GetInt("POSTGRE_MAX_IDLE_CONN"),
 		ConnMaxLifetime: a.config.GetDuration("POSTGRE_CONN_MAX_LIFETIME"),
 	}
 }

@@ -1,8 +1,8 @@
-FROM kitabisa/debian-base-image:latest
+FROM flip-id/debian-base-image:latest
 
 ARG GIT_COMMIT
 ARG VERSION
-LABEL REPO="https://github.com/kitabisa/{{ cookiecutter.app_name }}"
+LABEL REPO="https://github.com/flip-id/{{ cookiecutter.app_name }}"
 LABEL GIT_COMMIT=$GIT_COMMIT
 LABEL VERSION=$VERSION
 

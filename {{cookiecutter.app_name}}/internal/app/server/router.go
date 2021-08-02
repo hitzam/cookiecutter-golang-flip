@@ -5,9 +5,9 @@ import (
 
 	"github.com/go-chi/chi"
 	cmiddleware "github.com/go-chi/chi/middleware"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/commons"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/internal/app/handler"
-	"github.com/kitabisa/{{ cookiecutter.app_name }}/version"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/handler"
+	"github.com/flip-id/{{ cookiecutter.app_name }}/version"
 	phttp "github.com/kitabisa/perkakas/v2/http"
 
 	// pmiddleware "github.com/kitabisa/perkakas/v2/middleware"
