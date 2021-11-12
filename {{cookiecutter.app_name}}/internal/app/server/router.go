@@ -1,47 +1,38 @@
 package server
 
 import (
-	"net/http"
+	"github.com/gin-contrib/requestid"
+	"github.com/gin-gonic/gin"
+	goCoreHttp "gitlab.com/flip-id/go-core/http"
+	goCoreMiddleware "gitlab.com/flip-id/go-core/middleware"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/configs"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/controllers"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/server/middlewares"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/server/v1"
 
-	"github.com/go-chi/chi"
-	cmiddleware "github.com/go-chi/chi/middleware"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/handler"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/version"
-	phttp "github.com/kitabisa/perkakas/v2/http"
-
-	// pmiddleware "github.com/kitabisa/perkakas/v2/middleware"
-	pstructs "github.com/kitabisa/perkakas/v2/structs"
+	"gitlab.com/flip-id/go-core/structs"
 )
 
-// Router a chi mux
+// Router a gin gonic
 func Router(opt handler.HandlerOption) *chi.Mux {
-	handlerCtx := phttp.NewContextHandler(pstructs.Meta{
-		Version: version.Version,
-		Status:  "stable", //TODO: ask infra if this is used
-		APIEnv:  version.Environment,
+	cfg := config.GetConfig()
+	handlerCtx := goCoreHttp.NewContextHandler(structs.Meta{
+		APIEnv:  cfg.App.Env,
 	})
 	commons.InjectErrors(&handlerCtx)
 
-	// headerCheckMiddleware := pmiddleware.NewHeaderCheck(handlerCtx, opt.AppCtx.GetAppOption().Secret)
+	r := gin.Default()
+	r.Use(middlewares.API())
+	r.Use(requestid.New())
+	r.Use(middlewares.LogFormatter())
+	r.Use(middlewares.CORS())
+	r.Use(goCoreMiddleware.HandleError())
 
-	r := chi.NewRouter()
-	// A good base middleware stack (from chi) + middleware from perkakas
-	r.Use(cmiddleware.RequestID)
-	r.Use(cmiddleware.RealIP)
-	// r.Use(headerCheckMiddleware) //use this if you want to use default kitabisa's header
-	r.Use(cmiddleware.Recoverer)
+	healthCheckController := controllers.NewHealthCheckController(opt, &handlerCtx)
+	
+	r.GET("/ping", healthCheckController.Ping)
+	r.GET("/health-check", healthCheckController.HealthCheck)
 
-	// the handler
-	phandler := phttp.NewHttpHandler(handlerCtx)
-
-	healthCheckHandler := handler.HealthCheckHandler{}
-	healthCheckHandler.HandlerOption = opt
-	healthCheckHandler.Handler = phandler(healthCheckHandler.HealthCheck)
-
-	// Setup your routing here
-	r.Method(http.MethodGet, "/health-check", healthCheckHandler)
 	return r
 }
-
-// TODO: func authRouter()

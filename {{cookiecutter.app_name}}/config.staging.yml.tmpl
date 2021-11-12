@@ -1,0 +1,50 @@
+app:
+  host: "localhost"
+  env: "staging"
+  port: 9001
+  code: "001" #service identity, must be unique among services, 
+
+database:
+  driver: "mysql"
+  name: "{{ cookiecutter.app_name }}"
+  user: "$DB_USERNAME"
+  password: "$DB_PASSWORD"
+  host: "[db-host]"
+  port: "3306"
+  additionalParameters: "parseTime=true"
+
+server:
+  port: "9001"
+
+jwt:
+  expirationTime: "648000"
+  secret: "$JWT_SECRET"
+
+Sentry:
+  DSN: "[dsn-sentry]"
+
+flipServer:
+  baseUrl: "https://b2c-regression-box.flip.id/api"
+
+cache:
+  isEnable: true
+  host: "[cache-host]"
+  port: 6379
+  db: 2
+  password:
+  dialConnTimeOut: 5s
+  readTimeOut: 5s
+  writeTimeOut: 5s
+  idleTimeOut: 10s
+  maxConnLifeTime: 5m
+  maxIdleConn: 2
+  maxActiveConn: 50
+  isWait: true
+
+errorMap:
+  1001:
+    id: "Error koneksi database"
+    en: "Database connection error"
+  1002:
+    id: "Error koneksi cache"
+    en: "Cache connection error"

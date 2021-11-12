@@ -28,7 +28,7 @@ help:
 .PHONY: build
 build:
 	@echo "Building ${APP_NAME} ${VERSION}"
-	go build -ldflags "-w -X github.com/flip-id/{{ cookiecutter.app_name }}/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/flip-id/{{ cookiecutter.app_name }}/version.Version=${VERSION} -X github.com/flip-id/{{ cookiecutter.app_name }}/version.Environment=${ENV} -X github.com/flip-id/{{ cookiecutter.app_name }}/version.BuildDate=${BUILD_DATE}" -o bin/${APP_NAME}
+	go build -ldflags "-w -X gitlab.com/flip-id/{{ cookiecutter.app_name }}/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X gitlab.com/flip-id/{{ cookiecutter.app_name }}/version.Version=${VERSION} -X gitlab.com/flip-id/{{ cookiecutter.app_name }}/version.Environment=${ENV} -X gitlab.com/flip-id/{{ cookiecutter.app_name }}/version.BuildDate=${BUILD_DATE}" -o ${APP_NAME}
 
 .PHONY: package
 package:

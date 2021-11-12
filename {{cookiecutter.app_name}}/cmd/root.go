@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/go-redis/redis/v8"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/config"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/appcontext"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/driver"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/metrics"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/repository"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/server"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/service"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"gorm.io/gorm"
+	"gitlab.com/flip-id/go-core/helpers/array"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/config"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/appcontext"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/driver"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/repositories"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/server"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/services"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -45,33 +45,31 @@ func init() {
 
 {% if cookiecutter.is_server == "y" -%}
 func start() {
-	cfg := config.Config()
+	cfg := config.GetConfig()
+
+	tracer.Start()
+	defer tracer.Stop()
+
+	initSentry(cfg)
 
 	app := appcontext.NewAppContext(cfg)
 	var err error
 
-	var dbMysql *gorm.DB
-	if app.GetMysqlOption().IsEnable {
-		dbMysql, err = app.GetDBInstance(appcontext.DBDialectMysql)
-		if err != nil {
-			logrus.Fatalf("Failed to start, error connect to DB MySQL | %v", err)
-			return
-		}
-	}
-
-	var dbPostgre *gorm.DB
-	if app.GetPostgreOption().IsEnable {
-		dbPostgre, err = app.GetDBInstance(appcontext.DBDialectPostgres)
-		if err != nil {
-			logrus.Fatalf("Failed to start, error connect to DB Postgre | %v", err)
-			return
-		}
+	dbMysql, err := app.GetDBInstance(appcontext.DBDialectMysql)
+	if err != nil {
+		logrus.Fatalf("Failed to start, error connect to DB MySQL | %v", err)
+		return
 	}
 
 	var cacheClient *redis.Client
 	if app.GetCacheOption().IsEnable {
 		cacheClient = driver.NewCache(app.GetCacheOption())
 		defer cacheClient.Close()
+		_, err := cacheClient.Ping(context.Background()).Result()
+		if err != nil {
+			logrus.Fatalf("Failed to start, error connect to Redis | %v", err)
+			return
+		}
 	}
 
 	opt := commons.Options{
@@ -79,15 +77,13 @@ func start() {
 		CacheClient: cacheClient,
 		Config:      cfg,
 		DbMysql:     dbMysql,
-		DbPostgre:   dbPostgre,
-		Metric:      metrics.NewMetric(app.GetTelegrafOption(), app.GetAppOption().Name),
 	}
 
-	repo := wiringRepository(repository.Option{
+	repo := wiringRepository(repositories.Option{
 		Options: opt,
 	})
 
-	service := wiringService(service.Option{
+	service := wiringService(services.Option{
 		Options:    opt,
 		Repository: repo,
 	})
@@ -98,7 +94,20 @@ func start() {
 	server.StartApp()
 }
 
-func wiringRepository(repoOption repository.Option) *repository.Repository {
+func initSentry(conf *config.Configuration) {
+	if array.InArray(conf.App.Env, []string{"production", "staging"}) && conf.Sentry.DSN != nil {
+		if err := sentry.Init(sentry.ClientOptions{
+			Dsn:         *conf.Sentry.DSN,
+			Environment: conf.App.Env,
+		}); err != nil {
+			panic("Cannot initialize sentry")
+		}
+	} else {
+		log.Println("Sentry is not set on this stage")
+	}
+}
+
+func wiringRepository(repoOption repositories.Option) *repositories.Repository {
 	// wiring up all your repos here
 	cacheRepo := repository.NewCacheRepository(repoOption)
 
@@ -108,12 +117,12 @@ func wiringRepository(repoOption repository.Option) *repository.Repository {
 	return &repo
 }
 
-func wiringService(serviceOption service.Option) *service.Services {
+func wiringService(serviceOption services.Option) *services.Services {
 	// wiring up all services
-	hc := service.NewHealthCheck(serviceOption)
+	healthCheck := services.NewHealthCheck(serviceOption)
 
-	svc := service.Services{
-		HealthCheck: hc,
+	svc := services.Services{
+		HealthCheck: healthCheck,
 	}
 	return &svc
 }

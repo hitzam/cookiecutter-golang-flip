@@ -1,7 +1,0 @@
-* @hitzam
-
-# System Squad
-helmfile.yaml @flip-id/system-squad
-Makefile @flip-id/system-squad
-.infra/ @flip-id/system-squad
-.github/ @flip-id/system-squad

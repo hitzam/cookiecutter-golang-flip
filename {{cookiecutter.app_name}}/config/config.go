@@ -1,59 +1,93 @@
 package config
 
 import (
-	"fmt"
-	"os"
-	"strings"
+	"log"
+	"sync"
 	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
-
-// Provider the config provider
-type Provider interface {
-	ConfigFileUsed() string
-	Get(key string) interface{}
-	GetBool(key string) bool
-	GetDuration(key string) time.Duration
-	GetFloat64(key string) float64
-	GetInt(key string) int
-	GetInt64(key string) int64
-	GetSizeInBytes(key string) uint
-	GetString(key string) string
-	GetStringMap(key string) map[string]interface{}
-	GetStringMapString(key string) map[string]string
-	GetStringMapStringSlice(key string) map[string][]string
-	GetStringSlice(key string) []string
-	GetTime(key string) time.Time
-	InConfig(key string) bool
-	IsSet(key string) bool
-}
 
 var defaultConfig *viper.Viper
 
 func init() {
-	defaultConfig = readViperConfig()
 }
 
-func readViperConfig() *viper.Viper {
-	// handle config path for unit test
-	dirPath, err := os.Getwd()
-	if err != nil {
-		panic(fmt.Errorf("Error get working dir: %s", err))
-	}
-	dirPaths := strings.Split(dirPath, "/internal")
-
-	godotenv.Load(fmt.Sprintf("%s/params/.env", dirPaths[0]))
-	godotenv.Load("./params/.env")
-
-	v := viper.New()
-	v.AllowEmptyEnv(true)
-	v.AutomaticEnv()
-	return v
+type AppConfiguration struct {
+	Host string
+	Env  string
+	Port int
+	Code string
 }
 
-// Config return provider so that you can read config anywhere
-func Config() Provider {
-	return defaultConfig
+type DatabaseConfiguration struct {
+	Driver               string
+	Name                 string
+	User                 string
+	Password             string
+	Host                 string
+	Port                 int
+	AdditionalParameters string
+	MaxOpenConns         int
+	MaxIdleConns         int
+	ConnMaxLifetime      time.Duration
+}
+
+type FlipServerConfiguration struct {
+	BaseUrl         string
+}
+}
+type CacheConfiguration struct {
+	IsEnable           bool
+	Host               string
+	Port               int
+	DialConnectTimeout time.Duration
+	ReadTimeout        time.Duration
+	WriteTimeout       time.Duration
+	MaxIdle            int
+	MaxActive          int
+	IdleTimeout        time.Duration
+	Wait               bool
+	MaxConnLifetime    time.Duration
+	Password           string
+	Db                 int
+}
+
+type ErrorDesc struct {
+	Id string
+	En string
+}
+
+var configuration *Configuration
+var once sync.Once
+
+type Configuration struct {
+	App       AppConfiguration
+	Database  DatabaseConfiguration
+	JWT       JWTConfiguration
+	Sentry    SentryConfiguration
+	Wappin    WappinConfiguration
+	Freshchat FreshchatConfiguration
+	Infobip   InfobipConfiguration
+	Wavecell  WavecellConfiguration
+	Cache     CacheConfiguration
+	ErrorMap  map[string]ErrorDesc
+}
+
+func GetConfig() *Configuration {
+	once.Do(func() {
+		viper.SetConfigName("config")
+		viper.SetConfigType("yaml")
+		viper.AddConfigPath(".")
+
+		if err := viper.ReadInConfig(); err != nil {
+			log.Fatalf("Error reading config file, %s", err)
+		}
+
+		if err := viper.Unmarshal(&configuration); err != nil {
+			log.Fatalf("Unable to decode into struct, %v", err)
+		}
+	})
+
+	return configuration
 }

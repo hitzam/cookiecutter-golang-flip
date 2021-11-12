@@ -5,45 +5,56 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/flip-id/{{ cookiecutter.app_name }}/config"
-	phttp "github.com/kitabisa/perkakas/v2/http"
-	"github.com/kitabisa/perkakas/v2/structs"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/config"
+	coreHttp "gitlab.com/flip-id/go-core/http"
+	"gitlab.com/flip-id/go-core/structs"
 )
 
 var cfg = config.Config()
+var serviceCode = cfg.App.Code
+
+type Response struct {
+	ResponseCode string
+	ResponseDesc string
+}
 
 // InjectErrors injecting all error response to the handler context
-func InjectErrors(handlerCtx *phttp.HttpHandlerContext) {
+func InjectErrors(handlerCtx *coreHttp.HttpHandlerContext) {
 	handlerCtx.AddError(ErrDBConn, ErrDBConnResp)
 	handlerCtx.AddError(ErrCacheConn, ErrCacheConnResp)
 	// etc...
 }
 
-// getErrorResponce will return error response code & description object according to error code
-func getErrorResponce(errorCode string) structs.Response {
-	return structs.Response{
-		ResponseCode: errorCode,
+// getErrorResponse will return error response code & description object according to error code
+func getErrorResponse(errorCode string) structs.Response {
+	res := structs.Response{
+		ResponseCode: fmt.Sprintf("%s%s", serviceCode, errorCode),
 		ResponseDesc: structs.ResponseDesc{
-			ID: cfg.GetString(fmt.Sprintf("RESPONSE_CODE_ID_%s", errorCode)),
-			EN: cfg.GetString(fmt.Sprintf("RESPONSE_CODE_EN_%s", errorCode)),
+			ID: cfg.ErrorMap[errorCode].Id,
+			EN: cfg.ErrorMap[errorCode].En,
 		},
 	}
+	fmt.Println(cfg.ErrorMap[errorCode].Id)
+	fmt.Printf("%+v", res)
+	return res
 }
 
 // ErrDBConn error type for Error DB Connection
-var ErrDBConn = errors.New("ErrDBConn")
+var (
+	ErrDBConn = errors.New("ErrDBConn")
 
-// ErrDBConnResp ErrDBConn's response
-var ErrDBConnResp *structs.ErrorResponse = &structs.ErrorResponse{
-	Response:   getErrorResponce("101001"),
-	HttpStatus: http.StatusInternalServerError,
-}
+	ErrDBConnResp *structs.ErrorResponse = &structs.ErrorResponse{
+		Response:   getErrorResponse("1001"),
+		HttpStatus: http.StatusInternalServerError,
+	}
+)
 
 // ErrCacheConn error type for Error Cache Connection
-var ErrCacheConn = errors.New("ErrCacheConn")
+var (
+	ErrCacheConn = errors.New("ErrCacheConn")
 
-// ErrCacheConnResp ErrCacheConn's response
-var ErrCacheConnResp *structs.ErrorResponse = &structs.ErrorResponse{
-	Response:   getErrorResponce("101002"),
-	HttpStatus: http.StatusInternalServerError,
-}
+	ErrCacheConnResp *structs.ErrorResponse = &structs.ErrorResponse{
+		Response:   getErrorResponse("1002"),
+		HttpStatus: http.StatusInternalServerError,
+	}
+)

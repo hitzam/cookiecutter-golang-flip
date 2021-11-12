@@ -8,7 +8,10 @@ bin/
 .DS_Store
 
 # config file
-params/.env
+.env
+config.yaml
+launch.json
+.vscode
 
 # executables & libs
 {{ cookiecutter.app_name }}

@@ -1,16 +1,15 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"time"
 
-	"github.com/flip-id/{{ cookiecutter.app_name }}/config"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/appcontext"
 	migrate "github.com/rubenv/sql-migrate"
-	plog "github.com/kitabisa/perkakas/v2/log"
 	"github.com/spf13/cobra"
+	goCoreLog "gitlab.com/flip-id/go-core/helpers/log"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/config"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/appcontext"
 )
 
 var migrateUpCmd = &cobra.Command{
@@ -18,12 +17,11 @@ var migrateUpCmd = &cobra.Command{
 	Short: "Migrate Up DB {{ cookiecutter.app_name }}",
 	Long:  `Please you know what are you doing by using this command`,
 	Run: func(cmd *cobra.Command, args []string) {
-		c := config.Config()
+		c := config.GetConfig()
 		appCtx := appcontext.NewAppContext(c)
 		mSource := getMigrateSource()
 
 		doMigrate(appCtx, mSource, appcontext.DBDialectMysql, migrate.Up)
-		doMigrate(appCtx, mSource, appcontext.DBDialectPostgres, migrate.Up)
 	},
 }
 
@@ -32,12 +30,11 @@ var migrateDownCmd = &cobra.Command{
 	Short: "Migrate Up DB {{ cookiecutter.app_name }}",
 	Long:  `Please you know what are you doing by using this command`,
 	Run: func(cmd *cobra.Command, args []string) {
-		c := config.Config()
+		c := config.GetConfig()
 		appCtx := appcontext.NewAppContext(c)
 		mSource := getMigrateSource()
 
 		doMigrate(appCtx, mSource, appcontext.DBDialectMysql, migrate.Down)
-		doMigrate(appCtx, mSource, appcontext.DBDialectPostgres, migrate.Down)
 	},
 }
 
@@ -68,9 +65,10 @@ func getMigrateSource() migrate.FileMigrationSource {
 }
 
 func doMigrate(appCtx *appcontext.AppContext, mSource migrate.FileMigrationSource, dbDialect string, direction migrate.MigrationDirection) error {
+	logger := goCoreLog.GetLogger(nil)
 	db, err := appCtx.GetDBInstance(dbDialect)
 	if err != nil {
-		plog.Zlogger(context.Background()).Fatal().Err(err).Msg("Error connection to DB")
+		logger.FormatLog("GetDBInstance", err, dbDialect).Error("Error connection to DB")
 		return err
 	}
 
@@ -80,15 +78,15 @@ func doMigrate(appCtx *appcontext.AppContext, mSource migrate.FileMigrationSourc
 
 	total, err := migrate.Exec(sqlDB, dbDialect, mSource, direction)
 	if err != nil {
-		plog.Zlogger(context.Background()).Err(err).Msg("Fail migration")
+		logger.FormatLog("Migrate", err, dbDialect).Error("Fail migration")
 		return err
 	}
-
-	plog.Zlogger(context.Background()).Info().Msgf("Migrate Success, total migrated: %d", total)
+	logger.Infof("Migrate Success, total migrated: %d", total)
 	return nil
 }
 
 func createMigrationFile(mDir string, mName string) error {
+	logger := goCoreLog.GetLogger(nil)
 	var migrationContent = `-- +migrate Up
 -- SQL in section 'Up' is executed when this migration is applied
 -- [your SQL script here]
@@ -102,7 +100,7 @@ func createMigrationFile(mDir string, mName string) error {
 
 	f, err := os.Create(filepath)
 	if err != nil {
-		plog.Zlogger(context.Background()).Err(err).Str("filepath", filepath).Msg("Error create migration file")
+		logger.FormatLog("create file", err, filepath).Error("Error create migration file")
 		return err
 	}
 	defer f.Close()
@@ -110,6 +108,6 @@ func createMigrationFile(mDir string, mName string) error {
 	f.WriteString(migrationContent)
 	f.Sync()
 
-	plog.Zlogger(context.Background()).Info().Str("filepath", filepath).Msg("New migration file has been created")
+	logger.Info("New migration file has been created")
 	return nil
 }

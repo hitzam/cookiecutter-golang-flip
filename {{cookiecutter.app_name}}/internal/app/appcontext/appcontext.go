@@ -3,9 +3,10 @@ package appcontext
 import (
 	"errors"
 
-	"github.com/flip-id/{{ cookiecutter.app_name }}/config"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/driver"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/metrics"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/config"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/driver"
+	flipserver "gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/pkg/clients/flip_server"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/metrics"
 	"gorm.io/gorm"
 )
 
@@ -19,11 +20,11 @@ const (
 
 // AppContext the app context struct
 type AppContext struct {
-	config config.Provider
+	config *config.Configuration
 }
 
 // NewAppContext initiate appcontext object
-func NewAppContext(config config.Provider) *AppContext {
+func NewAppContext(config *config.Configuration) *AppContext {
 	return &AppContext{
 		config: config,
 	}
@@ -32,10 +33,9 @@ func NewAppContext(config config.Provider) *AppContext {
 // GetAppOption returns application options
 func (a *AppContext) GetAppOption() AppOption {
 	return AppOption{
-		Host:   a.config.GetString("APP_HOST"),
-		Port:   a.config.GetInt("APP_PORT"),
-		Name:   a.config.GetString("APP_NAME"),
-		Secret: a.config.GetString("APP_SECRET"),
+		Host: a.config.App.Host,
+		Port: a.config.App.Port,
+		Env:  a.config.App.Env,
 	}
 }
 
@@ -47,9 +47,6 @@ func (a *AppContext) GetDBInstance(dbType string) (*gorm.DB, error) {
 	case DBDialectMysql:
 		dbOption := a.GetMysqlOption()
 		gorm, err = driver.NewMysqlDatabase(dbOption)
-	case DBDialectPostgres:
-		dbOption := a.GetPostgreOption()
-		gorm, err = driver.NewPostgreDatabase(dbOption)
 	default:
 		err = errors.New("Error get db instance, unknown db type")
 	}
@@ -60,57 +57,41 @@ func (a *AppContext) GetDBInstance(dbType string) (*gorm.DB, error) {
 // GetMysqlOption returns mysql options
 func (a *AppContext) GetMysqlOption() driver.DBMysqlOption {
 	return driver.DBMysqlOption{
-		IsEnable:             a.config.GetBool("MYSQL_IS_ENABLED"),
-		Host:                 a.config.GetString("MYSQL_HOST"),
-		Port:                 a.config.GetInt("MYSQL_PORT"),
-		Username:             a.config.GetString("MYSQL_USERNAME"),
-		Password:             a.config.GetString("MYSQL_PASSWORD"),
-		DBName:               a.config.GetString("MYSQL_DB_NAME"),
-		AdditionalParameters: a.config.GetString("MYSQL_ADDITIONAL_PARAMS"),
-		MaxOpenConns:         a.config.GetInt("MYSQL_MAX_OPEN_CONNECTION"),
-		MaxIdleConns:         a.config.GetInt("MYSQL_MAX_IDLE_CONNECTION"),
-		ConnMaxLifetime:      a.config.GetDuration("MYSQL_CONNECTION_MAX_LIFETIME"),
-	}
-}
-
-// GetPostgreOption returns postgresql option
-func (a *AppContext) GetPostgreOption() driver.DBPostgreOption {
-	return driver.DBPostgreOption{
-		IsEnable:    	 a.config.GetBool("POSTGRE_IS_ENABLED"),
-		Host:        	 a.config.GetString("POSTGRE_HOST"),
-		Port:        	 a.config.GetInt("POSTGRE_PORT"),
-		Username:    	 a.config.GetString("POSTGRE_USERNAME"),
-		Password:    	 a.config.GetString("POSTGRE_PASSWORD"),
-		DBName:      	 a.config.GetString("POSTGRE_DB_NAME"),
-		MaxOpenConns: 	 a.config.GetInt("POSTGRE_MAX_OPEN_CONN"),
-		MaxIdleConns: 	 a.config.GetInt("POSTGRE_MAX_IDLE_CONN"),
-		ConnMaxLifetime: a.config.GetDuration("POSTGRE_CONN_MAX_LIFETIME"),
+		Host:                 a.config.Database.Host,
+		Port:                 a.config.Database.Port,
+		User:                 a.config.Database.User,
+		Password:             a.config.Database.Password,
+		DBName:               a.config.Database.Name,
+		AdditionalParameters: a.config.Database.AdditionalParameters,
+		MaxOpenConns:         a.config.Database.MaxOpenConns,
+		MaxIdleConns:         a.config.Database.MaxIdleConns,
+		ConnMaxLifetime:      a.config.Database.ConnMaxLifetime,
 	}
 }
 
 // GetCacheOption returns redis options
 func (a *AppContext) GetCacheOption() driver.CacheOption {
 	return driver.CacheOption{
-		IsEnable:           a.config.GetBool("CACHE_IS_ENABLED"),
-		Host:               a.config.GetString("CACHE_HOST"),
-		Port:               a.config.GetInt("CACHE_PORT"),
-		Namespace:          a.config.GetInt("CACHE_NAMESPACE"),
-		Password:           a.config.GetString("CACHE_PASSWORD"),
-		DialConnectTimeout: a.config.GetDuration("CACHE_DIAL_CONNECT_TIMEOUT"),
-		ReadTimeout:        a.config.GetDuration("CACHE_READ_TIMEOUT"),
-		WriteTimeout:       a.config.GetDuration("CACHE_WRITE_TIMEOUT"),
-		IdleTimeout:        a.config.GetDuration("CACHE_IDLE_TIMEOUT"),
-		MaxConnLifetime:    a.config.GetDuration("CACHE_CONNECTION_MAX_LIFETIME"),
-		MaxIdle:            a.config.GetInt("CACHE_MAX_IDLE_CONNECTION"),
-		MaxActive:          a.config.GetInt("CACHE_MAX_ACTIVE_CONNECTION"),
+		IsEnable:           a.config.Cache.IsEnable,
+		Host:               a.config.Cache.Host,
+		Port:               a.config.Cache.Port,
+		DB:                 a.config.Cache.Db,
+		Password:           a.config.Cache.Password,
+		DialConnectTimeout: a.config.Cache.DialConnectTimeout,
+		ReadTimeout:        a.config.Cache.ReadTimeout,
+		WriteTimeout:       a.config.Cache.WriteTimeout,
+		IdleTimeout:        a.config.Cache.IdleTimeout,
+		MaxConnLifetime:    a.config.Cache.MaxConnLifetime,
+		MaxIdle:            a.config.Cache.MaxIdle,
+		MaxActive:          a.config.Cache.MaxActive,
 	}
 }
 
-// GetTelegrafOption return telegraf options
-func (a *AppContext) GetTelegrafOption() metrics.TelegrafOption {
-	return metrics.TelegrafOption{
-		IsEnabled: a.config.GetBool("TELEGRAF_ENABLE"),
-		Host:      a.config.GetString("TELEGRAF_HOST"),
-		Port:      a.config.GetInt("TELEGRAF_PORT"),
+// GetFlipServerClient return flip_server interface
+func (a *AppContext) GetFlipServerClient() flipserver.IFlipServerClient {
+	OPT := flipserver.Option{
+		BaseUrl:   a.config.FlipServer.BaseUrl,
 	}
+
+	return flipserver.NewFlipServerClient(OPT)
 }

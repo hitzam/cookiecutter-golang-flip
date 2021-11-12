@@ -1,26 +1,17 @@
-FROM flip-id/debian-base-image:latest
+FROM registry-intl.ap-southeast-5.aliyuncs.com/flip-default/alpine:latest
 
-ARG GIT_COMMIT
-ARG VERSION
-LABEL REPO="https://github.com/flip-id/{{ cookiecutter.app_name }}"
-LABEL GIT_COMMIT=$GIT_COMMIT
-LABEL VERSION=$VERSION
+# Add packages to set timezone to WIB instead of default UTC value
+RUN apk update && \
+    apk add --no-cache tzdata
 
-# Because of https://github.com/docker/docker/issues/14914
-ENV PATH=$PATH:/opt/{{ cookiecutter.app_name }}
+# Set working directory for docker container to /app
+WORKDIR /app
 
-WORKDIR /opt/{{ cookiecutter.app_name }}
+# Create directory for storing application logs
+RUN mkdir /app/log
 
-COPY ./bin/{{ cookiecutter.app_name }} /opt/{{ cookiecutter.app_name }}/
-{% if cookiecutter.use_migrate_migration == "y" -%}
-COPY ./migrations /opt/{{ cookiecutter.app_name }}/migrations/
-{% endif %}
-RUN chmod +x /opt/{{ cookiecutter.app_name }}/{{ cookiecutter.app_name }}
+# Copy application binary and respective config files to /app
+COPY /{{ cookiecutter.app_name }} /app/main
 
-# Create appuser
-RUN adduser --disabled-password --gecos '' {{ cookiecutter.app_name }}
-USER {{ cookiecutter.app_name }}
-
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-
-CMD ["/opt/{{ cookiecutter.app_name }}/{{ cookiecutter.app_name }}"]
+# Run the app
+ENTRYPOINT ["/app/main"]

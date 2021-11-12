@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ cookiecutter.app_name }}
+  namespace: frontend
+  labels:
+    app: {{ cookiecutter.app_name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ cookiecutter.app_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ cookiecutter.app_name }}
+    spec:
+      containers:
+        - name: {{ cookiecutter.app_name }}
+          image: registry-intl.ap-southeast-5.aliyuncs.com/flip-default/{{ cookiecutter.app_name }}:$DOCKER_TAG
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: Asia/Jakarta
+            - name: DD_AGENT_HOST
+              value: "datadog-agent.datadog"
+            - name: DD_SERVICE
+              value: "{{ cookiecutter.app_name }}"
+            - name: DD_TAGS
+              value: "env:stg"
+            - name: DD_TRACE_SAMPLE_RATE
+              value: "1"
+            - name: DD_TRACE_CLI_ENABLED
+              value: "true"
+            - name: DD_TRACE_DEBUG
+              value: "false"
+            - name: DD_VERSION
+              value: "{{ cookiecutter.app_name }}:$RELEASE_VERSION"
+          ports:
+            - containerPort: 9001
+          resources:
+            limits:
+              cpu: "512m"
+              memory: "512Mi"
+            requests:
+              cpu: "256m"
+              memory: "256Mi"
+          volumeMounts:
+          - name: {{ cookiecutter.app_name }}-configmap-vol
+            mountPath: /app/config.yml
+            subPath: config.yml
+      imagePullSecrets:
+        - name: flip-registry
+      volumes:
+      - name: {{ cookiecutter.app_name }}-configmap-vol
+        configMap:
+          name: {{ cookiecutter.app_name }}-configmap

@@ -3,14 +3,13 @@ package service
 import (
 	"context"
 
+	goCoreLog "gitlab.com/flip-id/go-core/helpers/log"
 	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
-	plog "github.com/kitabisa/perkakas/v2/log"
 )
 
 // IHealthCheck interface for health check service
 type IHealthCheck interface {
 	HealthCheckDbMysql(ctx context.Context) (err error)
-	HealthCheckDbPostgres(ctx context.Context) (err error)
 	HealthCheckDbCache(ctx context.Context) (err error)
 }
 
@@ -25,30 +24,20 @@ func NewHealthCheck(opt Option) IHealthCheck {
 	}
 }
 
-func (h *healthCheck) HealthCheckDbMysql(ctx context.Context) (err error) {
-	sqlDB, _ := h.opt.DbMysql.DB()
+func (svc *healthCheck) HealthCheckDbMysql(ctx context.Context) (err error) {
+	sqlDB, _ := svc.opt.DbMysql.DB()
 	err = sqlDB.Ping()
 	if err != nil {
-		plog.Zlogger(ctx).Err(err).Send()
+		goCoreLog.GetLogger(ctx).FormatLog("DB ping", err, "").Error("Failed")
 		err = commons.ErrDBConn
 	}
 	return
 }
 
-func (h *healthCheck) HealthCheckDbPostgres(ctx context.Context) (err error) {
-	sqlDB, _ := h.opt.DbPostgre.DB()
-	err = sqlDB.Ping()
+func (svc *healthCheck) HealthCheckDbCache(ctx context.Context) (err error) {
+	err = svc.opt.CacheClient.Ping(ctx).Err()
 	if err != nil {
-		plog.Zlogger(ctx).Err(err).Send()
-		err = commons.ErrDBConn
-	}
-	return
-}
-
-func (h *healthCheck) HealthCheckDbCache(ctx context.Context) (err error) {
-	err = h.opt.CacheClient.Ping(ctx).Err()
-	if err != nil {
-		plog.Zlogger(ctx).Err(err).Send()
+		goCoreLog.GetLogger(ctx).FormatLog("Cache ping", err, "").Error("Failed")
 		err = commons.ErrCacheConn
 		return
 	}

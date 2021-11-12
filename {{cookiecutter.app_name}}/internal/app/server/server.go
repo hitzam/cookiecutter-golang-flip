@@ -7,10 +7,10 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/handler"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/service"
 	"github.com/sirupsen/logrus"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/controllers"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/services"
 )
 
 // IServer interface for server
@@ -50,7 +50,7 @@ func (s *server) StartApp() {
 	}()
 
 	srv.Addr = fmt.Sprintf("%s:%d", s.opt.AppCtx.GetAppOption().Host, s.opt.AppCtx.GetAppOption().Port)
-	hOpt := handler.HandlerOption{
+	hOpt := controllers.ControllerOption{
 		Options:  s.opt,
 		Services: s.services,
 	}

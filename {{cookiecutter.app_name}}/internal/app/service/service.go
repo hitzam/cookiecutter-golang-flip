@@ -1,14 +1,14 @@
 package service
 
 import (
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/repository"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/repositories"
 )
 
 // Option anything any service object needed
 type Option struct {
 	commons.Options
-	*repository.Repository
+	*repositories.Repository
 }
 
 // Services all service object injected here

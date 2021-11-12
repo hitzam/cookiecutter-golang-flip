@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ cookiecutter.app_name }}-svc
+  namespace: frontend
+  labels:
+    app: {{ cookiecutter.app_name }}
+spec:
+  ports:
+    - name: {{ cookiecutter.app_name }}
+      port: 9001
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: {{ cookiecutter.app_name }}

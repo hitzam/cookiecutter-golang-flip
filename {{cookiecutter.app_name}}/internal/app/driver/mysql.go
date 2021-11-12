@@ -5,16 +5,18 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/lib/pq"
+	sqltrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/database/sql"
+	gormtrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gorm.io/gorm.v1"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 // DBMysqlOption options for mysql connection
 type DBMysqlOption struct {
-	IsEnable             bool
 	Host                 string
 	Port                 int
-	Username             string
+	User                 string
 	Password             string
 	DBName               string
 	AdditionalParameters string
@@ -25,7 +27,10 @@ type DBMysqlOption struct {
 
 // NewMysqlDatabase return gorm dbmap object with MySQL options param
 func NewMysqlDatabase(option DBMysqlOption) (*gorm.DB, error) {
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?%s", option.Username, option.Password, option.Host, option.Port, option.DBName, option.AdditionalParameters))
+	// Register augments the provided driver with tracing, enabling it to be loaded by gormtrace.Open.
+	sqltrace.Register("mysql", &pq.Driver{})
+
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?%s", option.User, option.Password, option.Host, option.Port, option.DBName, option.AdditionalParameters))
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +44,7 @@ func NewMysqlDatabase(option DBMysqlOption) (*gorm.DB, error) {
 	db.SetMaxIdleConns(option.MaxIdleConns)
 	db.SetConnMaxLifetime(option.ConnMaxLifetime)
 
-	gorm, err := gorm.Open(mysql.New(mysql.Config{
+	gorm, err := gormtrace.Open(mysql.New(mysql.Config{
 		Conn: db,
 	}), &gorm.Config{})
 
