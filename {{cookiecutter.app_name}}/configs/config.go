@@ -35,6 +35,7 @@ type DatabaseConfiguration struct {
 
 type FlipServerConfiguration struct {
 	BaseUrl         string
+	ApiKey          string
 }
 }
 type CacheConfiguration struct {

@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"time"
 
-	goCoreHttp "gitlab.com/flip-id/go-core/http"
 	goCoreLog "gitlab.com/flip-id/go-core/helpers/log"
+	goCoreHttp "gitlab.com/flip-id/go-core/http"
 )
 
 //SendMessageCallbackRequest user profile payload
@@ -25,15 +25,17 @@ type SendMessageCallbackRequest struct {
 //Option clevertap option
 type Option struct {
 	BaseUrl string
+	ApiKey  string
 }
 
 const (
-	CALLBACK_ENDPOINT = "/v2/...." //Not implemented yet
+	USER_INFO_ENDPOINT = "/v1/user/info"
 )
 
 //Client clevertap client struct
 type Client struct {
 	BaseURL    string
+	ApiKey     string
 	HTTPClient *goCoreHttp.HttpClient
 }
 
@@ -46,17 +48,18 @@ type IFlipServerClient interface {
 func NewFlipServerClient(option Option) IFlipServerClient {
 	return &Client{
 		BaseURL:    option.BaseUrl,
+		ApiKey:     option.ApiKey,
 		HTTPClient: goCoreHttp.NewHttpClient(nil),
 	}
 }
 
 //SendEventData will send event
-func (ct *Client) SendMessageCallBack(ctx context.Context, payload SendMessageCallbackRequest) (err error) {
+func (ct *Client) GetUserInfo(ctx context.Context, jwtToken string) (err error) {
 	logger := goCoreLog.GetLogger(ctx)
 
-	req, err := ct.newRequest(http.MethodPost, CALLBACK_ENDPOINT, payload)
+	req, err := ct.newRequest(http.MethodGet, USER_INFO_ENDPOINT, jwtToken. nil)
 	if err != nil {
-		logger.FormatLog("create new request", err, CALLBACK_ENDPOINT).Error("failed")
+		logger.FormatLog("create new request", err, jwtToken).Error("failed")
 		return err
 	}
 
@@ -68,7 +71,7 @@ func (ct *Client) SendMessageCallBack(ctx context.Context, payload SendMessageCa
 	return nil
 }
 
-func (ct *Client) newRequest(method, path string, body interface{}) (*http.Request, error) {
+func (ct *Client) newRequest(method, path string, jwtToken string, body interface{}) (*http.Request, error) {
 	u := fmt.Sprintf("%s%s", ct.BaseURL, path)
 
 	var buf io.ReadWriter
@@ -86,6 +89,8 @@ func (ct *Client) newRequest(method, path string, body interface{}) (*http.Reque
 	}
 
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
+	req.Header.Set("api-key", ct.ApiKey)
+	req.Header.Set("Authorization", "Bearer "+jwtToken)
 
 	return req, nil
 }

@@ -24,7 +24,8 @@ Sentry:
   DSN: "[dsn-sentry]"
 
 flipServer:
-  baseUrl: "https://b2c-act-dev-box.flip.id/api/v2"
+  baseUrl: "https://b2c-act-dev-box.flip.id/api"
+  apiKey: "[api-key]"
 
 cache:
   isEnable: true
