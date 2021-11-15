@@ -1,7 +1,8 @@
 {
     "app_name": "golangproject",
-    "group": ["consumer", "business", "platform"],
-    "pod": ["consumer-app", "growth-analytics", "payment-transfer", "financial", "digital", "disbursement", "pay-with-flip", "identity", "payment-platform", "operation", "data", "system"],
+    "group": ["Consumer-Solutions", "Business-Solutions", "Platform-&-Internal-Products"],
+    "pod": ["consumer-app", "growth-analytics", "payment-transfer", "financial-management", "digital-product", "disbursement", "pay-with-flip", "risk-management", "payment-platform", "operation-platform", "data", "system"],
+    "stream": ["onboarding-&-home","communication","domestic-transfers","international-transfers","payment-experience","cash-transfers","risk","kyc","integration","emoney","help-center","ops-portal","recon-settlement"],
     "use_migrate_migration": "n",
     "is_worker": "n",
     "is_server": "y",

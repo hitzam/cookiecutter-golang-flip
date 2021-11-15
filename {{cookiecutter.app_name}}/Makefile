@@ -1,11 +1,12 @@
-SHELL         = /bin/bash
-APP_NAME      = {{ cookiecutter.app_name }}
-VERSION       = $(shell git describe --always --tags)
-GIT_COMMIT    = $(shell git rev-parse HEAD)
-GIT_DIRTY     = $(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
-BUILD_DATE    = $(shell date '+%Y-%m-%d-%H:%M:%S')
-POD           = "{{ cookiecutter.pod }}"
-GROUP         = "{{ cookiecutter.group }}"
+SHELL          = /bin/bash
+APP_NAME       = {{ cookiecutter.app_name }}
+VERSION        = $(shell git describe --always --tags)
+GIT_COMMIT     = $(shell git rev-parse HEAD)
+GIT_DIRTY      = $(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
+BUILD_DATE     = $(shell date '+%Y-%m-%d-%H:%M:%S')
+GROUP          = "{{ cookiecutter.group }}"
+POD            = "{{ cookiecutter.pod }}"
+STREAM         = "{{ cookiecutter.stream }}"
 
 .PHONY: default
 default: help
@@ -47,8 +48,9 @@ deploy:
 	@echo "Deploying ${APP_NAME} ${VERSION}"
 	export APP_NAME=${APP_NAME} && \
 	export VERSION=${VERSION} && \
-	export POD=${POD} && \
 	export GROUP=${GROUP} && \
+	export POD=${POD} && \
+	export STREAM=${STREAM} && \
 	helmfile apply
 
 .PHONY: helm-history-length
