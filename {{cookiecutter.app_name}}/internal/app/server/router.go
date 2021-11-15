@@ -9,7 +9,6 @@ import (
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/controllers"
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/server/middlewares"
-	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/server/v1"
 
 	"gitlab.com/flip-id/go-core/structs"
 )

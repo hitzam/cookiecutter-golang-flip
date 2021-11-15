@@ -6,7 +6,6 @@ import (
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/config"
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/driver"
 	flipserver "gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/pkg/clients/flip_server"
-	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/metrics"
 	"gorm.io/gorm"
 )
 
