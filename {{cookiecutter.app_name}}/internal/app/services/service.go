@@ -1,4 +1,4 @@
-package service
+package services
 
 import (
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"

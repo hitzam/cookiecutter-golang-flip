@@ -1,4 +1,4 @@
-package handler
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
@@ -8,10 +8,10 @@ import (
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/services"
 )
 
-// HandlerOption option for handler, including all service
-type HandlerOption struct {
+// ControllerOption option for handler, including all service
+type ControllerOption struct {
 	commons.Options
-	*service.Services
+	*services.Services
 }
 
 func (ctl *ControllerOption) Validate(param interface{}) error {

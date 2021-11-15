@@ -10,5 +10,5 @@ type Option struct {
 // Repository all repo object injected here
 type Repository struct {
 	// User IUserRepository
-	Cache ICacheRepo
+	Cache ICacheRepository
 }

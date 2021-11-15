@@ -13,7 +13,7 @@ type CacheOption struct {
 	Host               string
 	Port               int
 	Password           string
-	Namespace          int
+	DB                 int
 	DialConnectTimeout time.Duration
 	ReadTimeout        time.Duration
 	WriteTimeout       time.Duration
@@ -27,7 +27,7 @@ type CacheOption struct {
 func NewCache(option CacheOption) *redis.Client {
 	redisOptions := &redis.Options{
 		Addr:         fmt.Sprintf("%s:%d", option.Host, option.Port),
-		DB:           option.Namespace,
+		DB:           option.DB,
 		DialTimeout:  option.DialConnectTimeout,
 		ReadTimeout:  option.ReadTimeout,
 		WriteTimeout: option.WriteTimeout,

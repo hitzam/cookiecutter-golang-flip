@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	goCoreHttp "gitlab.com/flip-id/go-core/http"
 	goCoreMiddleware "gitlab.com/flip-id/go-core/middleware"
-	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/configs"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/config"
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/controllers"
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/server/middlewares"
@@ -14,7 +14,7 @@ import (
 )
 
 // Router a gin gonic
-func Router(opt handler.HandlerOption) *chi.Mux {
+func Router(opt controllers.ControllerOption) *gin.Engine {
 	cfg := config.GetConfig()
 	handlerCtx := goCoreHttp.NewContextHandler(structs.Meta{
 		APIEnv:  cfg.App.Env,

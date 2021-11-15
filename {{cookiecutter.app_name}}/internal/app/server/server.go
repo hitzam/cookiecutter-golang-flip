@@ -20,11 +20,11 @@ type IServer interface {
 
 type server struct {
 	opt      commons.Options
-	services *service.Services
+	services *services.Services
 }
 
 // NewServer create object server
-func NewServer(opt commons.Options, services *service.Services) IServer {
+func NewServer(opt commons.Options, services *services.Services) IServer {
 	return &server{
 		opt:      opt,
 		services: services,

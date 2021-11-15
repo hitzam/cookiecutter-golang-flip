@@ -34,10 +34,10 @@ type DatabaseConfiguration struct {
 }
 
 type FlipServerConfiguration struct {
-	BaseUrl         string
-	ApiKey          string
+	BaseUrl string
+	ApiKey  string
 }
-}
+
 type CacheConfiguration struct {
 	IsEnable           bool
 	Host               string
@@ -59,20 +59,20 @@ type ErrorDesc struct {
 	En string
 }
 
+type SentryConfiguration struct {
+	DSN string
+}
+
 var configuration *Configuration
 var once sync.Once
 
 type Configuration struct {
-	App       AppConfiguration
-	Database  DatabaseConfiguration
-	JWT       JWTConfiguration
-	Sentry    SentryConfiguration
-	Wappin    WappinConfiguration
-	Freshchat FreshchatConfiguration
-	Infobip   InfobipConfiguration
-	Wavecell  WavecellConfiguration
-	Cache     CacheConfiguration
-	ErrorMap  map[string]ErrorDesc
+	App        AppConfiguration
+	Database   DatabaseConfiguration
+	Sentry     SentryConfiguration
+	Cache      CacheConfiguration
+	ErrorMap   map[string]ErrorDesc
+	FlipServer FlipServerConfiguration
 }
 
 func GetConfig() *Configuration {

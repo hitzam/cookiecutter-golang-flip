@@ -10,7 +10,7 @@ import (
 	"gitlab.com/flip-id/go-core/structs"
 )
 
-var cfg = config.Config()
+var cfg = config.GetConfig()
 var serviceCode = cfg.App.Code
 
 type Response struct {

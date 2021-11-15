@@ -1,10 +1,10 @@
-package service
+package services
 
 import (
 	"context"
 
 	goCoreLog "gitlab.com/flip-id/go-core/helpers/log"
-	"github.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
+	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/commons"
 )
 
 // IHealthCheck interface for health check service

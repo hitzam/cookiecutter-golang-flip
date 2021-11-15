@@ -41,7 +41,7 @@ type Client struct {
 
 //IFlipServerClient interface
 type IFlipServerClient interface {
-	SendMessageCallBack(ctx context.Context, payload SendMessageCallbackRequest) (err error)
+	GetUserInfo(ctx context.Context, jwtToken string) (err error)
 }
 
 //NewCleverTapClient instantiate
@@ -57,7 +57,7 @@ func NewFlipServerClient(option Option) IFlipServerClient {
 func (ct *Client) GetUserInfo(ctx context.Context, jwtToken string) (err error) {
 	logger := goCoreLog.GetLogger(ctx)
 
-	req, err := ct.newRequest(http.MethodGet, USER_INFO_ENDPOINT, jwtToken. nil)
+	req, err := ct.newRequest(http.MethodGet, USER_INFO_ENDPOINT, jwtToken, nil)
 	if err != nil {
 		logger.FormatLog("create new request", err, jwtToken).Error("failed")
 		return err

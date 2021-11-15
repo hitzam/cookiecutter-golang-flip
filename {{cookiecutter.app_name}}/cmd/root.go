@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/getsentry/sentry-go"
@@ -16,6 +18,7 @@ import (
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/repositories"
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/server"
 	"gitlab.com/flip-id/{{ cookiecutter.app_name }}/internal/app/services"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -95,9 +98,9 @@ func start() {
 }
 
 func initSentry(conf *config.Configuration) {
-	if array.InArray(conf.App.Env, []string{"production", "staging"}) && conf.Sentry.DSN != nil {
+	if array.InArray(conf.App.Env, []string{"production", "staging"}) && conf.Sentry.DSN != "" {
 		if err := sentry.Init(sentry.ClientOptions{
-			Dsn:         *conf.Sentry.DSN,
+			Dsn:         conf.Sentry.DSN,
 			Environment: conf.App.Env,
 		}); err != nil {
 			panic("Cannot initialize sentry")
@@ -109,9 +112,9 @@ func initSentry(conf *config.Configuration) {
 
 func wiringRepository(repoOption repositories.Option) *repositories.Repository {
 	// wiring up all your repos here
-	cacheRepo := repository.NewCacheRepository(repoOption)
+	cacheRepo := repositories.NewCacheRepository(repoOption)
 
-	repo := repository.Repository{
+	repo := repositories.Repository{
 		Cache: cacheRepo,
 	}
 	return &repo
